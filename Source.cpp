@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <chrono>
 
 #include "Shader.h"
 
@@ -40,6 +41,8 @@ int main(void) {
     glGenVertexArrays(1, &vertex_array_object);
     glBindVertexArray(vertex_array_object);
 
+    double gTime = 0.0;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
         /* Render here */
@@ -54,6 +57,9 @@ int main(void) {
 
         /* Poll for and process events */
         glfwPollEvents();
+
+		// Update time value
+        gTime = glfwGetTime();
     }
 
     // Properly exit glfw
