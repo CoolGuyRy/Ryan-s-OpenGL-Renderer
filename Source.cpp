@@ -6,67 +6,78 @@
 #include "Shader.h"
 
 int main(void) {
-    GLFWwindow* window;
+	GLFWwindow* window;
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+	/* Initialize the library */
+	if (!glfwInit())
+		return -1;
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window) {
-        glfwTerminate();
-        return -1;
-    }
+	/* Specify Window settings / OpenGL versions to use for program */
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Load pointers to OpenGL functions 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize OpenGL context" << std::endl;
-        return -1;
-    }
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(1280, 960, "OpenGL Renderer", NULL, NULL);
+	if (!window) {
+		glfwTerminate();
+		return -1;
+	}
 
-    Shader gShader;
+	/* Make the window's context current */
+	glfwMakeContextCurrent(window);
 
-    gShader.AddShader("chapter02s02.vert", GL_VERTEX_SHADER);
-    gShader.AddShader("chapter02s01.frag", GL_FRAGMENT_SHADER);
-    gShader.Build();
+	// Load pointers to OpenGL functions 
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		std::cout << "Failed to initialize OpenGL context" << std::endl;
+		return -1;
+	}
 
-    glUseProgram(gShader.GetProgram());
+	Shader gShader;
 
-    GLuint vertex_array_object;
+	gShader.AddShader("chapter02s02.vert", GL_VERTEX_SHADER);
+	gShader.AddShader("chapter02s01.frag", GL_FRAGMENT_SHADER);
+	gShader.Build();
 
-    glGenVertexArrays(1, &vertex_array_object);
-    glBindVertexArray(vertex_array_object);
+	glUseProgram(gShader.GetProgram());
 
-    double gTime = 0.0;
+	GLuint vertex_array_object;
 
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window)) {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+	glGenVertexArrays(1, &vertex_array_object);
+	glBindVertexArray(vertex_array_object);
 
-        glPointSize(40.0f);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+	double gTime = 0.0;
+
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window)) {
+		/* Render here */
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// Having some fun here
+		GLfloat displace[] = { std::sin(gTime * 0.5) * 0.75f, std::cos(gTime * 0.5) * 0.75f, 0.0f, 0.0f };
+
+		glVertexAttrib4fv(0, displace);
+
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		// glDrawArrays(GL_POINTS, 0, 1); for shader chapter02s01.vert
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
 
-        /* Poll for and process events */
-        glfwPollEvents();
+		/* Poll for and process events */
+		glfwPollEvents();
 
 		// Update time value
-        gTime = glfwGetTime();
-    }
+		gTime = glfwGetTime();
+	}
 
-    // Properly exit glfw
-    glfwTerminate();
+	// Properly exit glfw
+	glfwTerminate();
 
 	// Check for errors (only call if crashing immediately)
-    // std::cin.get();
+	// std::cin.get();
 	
-    return 0;
+	return 0;
 }
