@@ -21,7 +21,7 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    // Load pointers to OpenGL functions
+    // Load pointers to OpenGL functions 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize OpenGL context" << std::endl;
         std::cin.get();
