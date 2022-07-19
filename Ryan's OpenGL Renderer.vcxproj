@@ -149,6 +149,9 @@
     <None Include="chapter03s01.tesc" />
     <None Include="chapter03s01.tese" />
     <None Include="chapter03s01.vert" />
+    <None Include="chapter03s02.frag" />
+    <None Include="chapter03s02.vert" />
+    <None Include="chapter03s03.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

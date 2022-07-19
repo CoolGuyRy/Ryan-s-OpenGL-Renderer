@@ -9,3 +9,5 @@ void main(void) {
 									
 	gl_Position = vertices[gl_VertexID] + offset;
 }
+
+// This vertex shader is used to draw another triangle and translate it with offset.

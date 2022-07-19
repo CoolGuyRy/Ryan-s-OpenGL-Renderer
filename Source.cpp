@@ -36,11 +36,11 @@ int main(void) {
 
 	Shader gShader;
 
-	gShader.AddShader("chapter03s01.vert", GL_VERTEX_SHADER);
-	gShader.AddShader("chapter03s01.frag", GL_FRAGMENT_SHADER);
-	gShader.AddShader("chapter03s01.tesc", GL_TESS_CONTROL_SHADER);
-	gShader.AddShader("chapter03s01.tese", GL_TESS_EVALUATION_SHADER);
-	gShader.AddShader("chapter03s01.geom", GL_GEOMETRY_SHADER);
+	gShader.AddShader("chapter03s02.vert", GL_VERTEX_SHADER);
+	gShader.AddShader("chapter03s03.frag", GL_FRAGMENT_SHADER);
+	//gShader.AddShader("chapter03s01.tesc", GL_TESS_CONTROL_SHADER);
+	//gShader.AddShader("chapter03s01.tese", GL_TESS_EVALUATION_SHADER);
+	//gShader.AddShader("chapter03s01.geom", GL_GEOMETRY_SHADER);
 	gShader.Build();
 
 	glUseProgram(gShader.GetProgram());
@@ -50,7 +50,7 @@ int main(void) {
 	glGenVertexArrays(1, &vertex_array_object);
 	glBindVertexArray(vertex_array_object);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	double gTime = 0.0;
 
@@ -65,11 +65,11 @@ int main(void) {
 		GLfloat displace[] = { std::sin(gTime * 0.5) * 0.75f, std::cos(gTime * 0.5) * 0.75f, 0.0f, 0.0f };
 		GLfloat color[] = { abs(std::sin(gTime * 0.5)) * 0.5f + 0.5f, abs(std::cos(gTime * 0.5)) * 0.5f + 0.5f, 0.0f, 1.0f };
 
-		glUniform4fv(0, 1, color);
+		// glUniform4fv(0, 1, color);
 		glVertexAttrib4fv(0, displace);
 
-		glDrawArrays(GL_PATCHES, 0, 3);
-		// glDrawArrays(GL_TRIANGLES, 0, 3); when drawing something with tesselation you are drawing patches
+		// glDrawArrays(GL_PATCHES, 0, 3); // use when tesselating
+		glDrawArrays(GL_TRIANGLES, 0, 3); // use otherwise
 		// glDrawArrays(GL_POINTS, 0, 1); for shader chapter02s01.vert
 
 		/* Swap front and back buffers */

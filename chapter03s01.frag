@@ -9,3 +9,5 @@ void main(void) {
 	// color = vec4(1.0, 0.0, 0.0, 1.0); // works
 	color = in_color; // works now that i replaced with uniform
 }
+
+// This shader takes in a uniform from the main function and passes it through to the fragment shader.

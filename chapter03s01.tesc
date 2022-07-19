@@ -11,3 +11,6 @@ void main(void) {
 	}
 	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 }
+
+// This shader is used to test the tessellation control shader.
+// Not entirely sure how this works yet but it is just for exposure to the tessellation control shader.
