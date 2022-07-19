@@ -34,6 +34,18 @@ void Shader::AddShader(std::string src, GLenum type) {
 	glShaderSource(shader, 1, &code, NULL);
 	glCompileShader(shader);
 
+	GLint returningParam;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &returningParam);
+	if (returningParam != GL_TRUE) {
+		GLint logLength;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+		char* log = new char[logLength];
+		glGetShaderInfoLog(shader, logLength, NULL, log);
+		std::cout << "Error compiling shader: " << log << std::endl;
+		delete[] log;
+		return;
+	}
+
 	mShaders.push_back(shader);
 }
 

@@ -10,9 +10,8 @@
 /*
 
 	TODO: 
-	
-	- Implement a way to handle errors in compiled shader code... [URGENT]
 
+	
 */
 
 class Shader {
