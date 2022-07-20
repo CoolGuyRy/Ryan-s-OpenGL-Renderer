@@ -38,9 +38,7 @@ int main(void) {
 
 	gShader.AddShader("chapter03s02.vert", GL_VERTEX_SHADER);
 	gShader.AddShader("chapter03s03.frag", GL_FRAGMENT_SHADER);
-	//gShader.AddShader("chapter03s01.tesc", GL_TESS_CONTROL_SHADER);
-	//gShader.AddShader("chapter03s01.tese", GL_TESS_EVALUATION_SHADER);
-	//gShader.AddShader("chapter03s01.geom", GL_GEOMETRY_SHADER);
+	
 	gShader.Build();
 
 	glUseProgram(gShader.GetProgram());
