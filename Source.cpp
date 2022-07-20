@@ -4,6 +4,7 @@
 #include <chrono>
 
 #include "Shader.h"
+#include "Model.h"
 
 int main(void) {
 	GLFWwindow* window;
@@ -42,6 +43,8 @@ int main(void) {
 	gShader.Build();
 
 	glUseProgram(gShader.GetProgram());
+
+	Model gModel("Models/dragon.obj");
 
 	GLuint vertex_array_object;
 
