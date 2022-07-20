@@ -101,7 +101,7 @@ void Model::Load(std::string objFile) {
 	std::cout << "Vertex Indices: " << mVertexIndices.size() << std::endl;
 	std::cout << "Texture Indices: " << mTextureIndices.size() << std::endl;
 	std::cout << "Normal Indices: " << mNormalIndices.size() << std::endl;
-	std::cout << "Faces: " << mVertexIndices.size() / 3 << std::endl;
+	std::cout << "Triangles: " << mVertexIndices.size() / 3 << std::endl;
 }
 
 void Model::Clear() {

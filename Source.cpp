@@ -44,7 +44,7 @@ int main(void) {
 
 	glUseProgram(gShader.GetProgram());
 
-	Model gModel("Models/dragon.obj");
+	Model gModel("Models/cube.obj");
 
 	GLuint vertex_array_object;
 
