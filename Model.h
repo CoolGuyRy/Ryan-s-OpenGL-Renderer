@@ -12,16 +12,11 @@
 
 	TODO:
 	
-	- For now, I just want to worry about getting the object data into the C++ program.
-	  Afterwards I will mess with how to load it into OpenGL.
-
-	- Load vertices into OpenGL Buffer and send it down pipeline
-
 	- Keep in mind that for some reason indices with negative values should be treated
 	  as offsets from the end of the list. (SAVE YOU LATER)
 
-	- I can clean up the Model Class by removing mVertices after establishing the 
-	  vertex indices
+	  - Lazy fix for this is to just import to blender then export. Blender automatically
+	    gets rid of negative indices.
 
 */
 

@@ -54,7 +54,7 @@ int main(void) {
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	Model gModel("Models/cow.obj");
+	Model gModel("Models/f22.obj");
 	gModel.Build();
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
