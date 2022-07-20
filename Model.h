@@ -20,6 +20,9 @@
 	- Keep in mind that for some reason indices with negative values should be treated
 	  as offsets from the end of the list. (SAVE YOU LATER)
 
+	- I can clean up the Model Class by removing mVertices after establishing the 
+	  vertex indices
+
 */
 
 class Model {
@@ -28,17 +31,19 @@ public:
 	Model(std::string);
 	
 	void Load(std::string);
+	void Build();
 
+	std::vector<glm::vec3>& GetVertices();
+	std::vector<glm::vec3>& GetNormals();
+	std::vector<glm::vec2>& GetTexCoords();
+
+	GLuint mVertexBuffer, mNormalBuffer, mTexBuffer;
 private:
 	void Clear();
 
 	std::vector<glm::vec3> mVertices;
 	std::vector<glm::vec3> mNormals;
 	std::vector<glm::vec2> mTexCoords;
-
-	std::vector<GLint> mVertexIndices;
-	std::vector<GLint> mNormalIndices;
-	std::vector<GLint> mTextureIndices;
 };
 
 #endif
