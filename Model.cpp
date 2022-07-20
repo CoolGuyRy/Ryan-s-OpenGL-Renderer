@@ -109,6 +109,11 @@ void Model::Load(std::string objFile) {
 }
 
 void Model::Build() {
+	if (mVertices.size() == 0) {
+		std::cout << "No vertices to build model from" << std::endl;
+		return;
+	}
+	
 	glGenBuffers(1, &mVertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(glm::vec3), &mVertices[0], GL_STATIC_DRAW);
