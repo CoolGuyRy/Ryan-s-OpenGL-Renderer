@@ -54,7 +54,7 @@ int main(void) {
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	Model gModel("Models/f22.obj");
+	Model gModel("Models/dragon.obj");
 	gModel.Build();
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -63,7 +63,7 @@ int main(void) {
 
 	GLuint mv_location = glGetUniformLocation(gShader.GetProgram(), "mv_matrix");
 	GLuint proj_location = glGetUniformLocation(gShader.GetProgram(), "proj_matrix");
-	
+
 	double gTime = 0.0;
 
 	/* Loop until the user closes the window */
@@ -76,12 +76,12 @@ int main(void) {
 		float f = (float)gTime * (float)glm::pi<float>() * 0.25f;
 
 		glm::mat4 mv_matrix = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, -8.0));
-		mv_matrix *= glm::rotate(mv_matrix, f, glm::vec3(0.0, 1.0, 0.0));
+		mv_matrix *= glm::rotate(mv_matrix, f, glm::vec3(1.0, 1.0, 1.0));
 
 		glUniformMatrix4fv(mv_location, 1, GL_FALSE, glm::value_ptr(mv_matrix));
 		glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
-		glDrawArrays(GL_TRIANGLES, 0, gModel.GetVertices().size());
+		glDrawArrays(GL_POINTS, 0, gModel.GetVertices().size());
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
