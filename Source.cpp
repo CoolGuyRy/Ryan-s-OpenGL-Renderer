@@ -1,7 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <chrono>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include "Shader.h"
 #include "Model.h"
@@ -44,27 +46,40 @@ int main(void) {
 	}
 
 	Shader gShader;
-	gShader.AddShader("chapter05s01.vert", GL_VERTEX_SHADER);
-	gShader.AddShader("chapter05s01.frag", GL_FRAGMENT_SHADER);
+	gShader.AddShader("chapter05s02.vert", GL_VERTEX_SHADER);
+	gShader.AddShader("chapter05s02.frag", GL_FRAGMENT_SHADER);
 	gShader.Build();
-
-	double gTime = 0.0;
 
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	Model gModel("Models/triangle.obj");
+	Model gModel("Models/cow.obj");
 	gModel.Build();
 
-	glUseProgram(gShader.GetProgram());
-
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glm::mat4 proj_matrix = glm::perspective(glm::radians(45.0f), 1280.0f / 960.0f, 0.1f, 100.0f);
+
+	GLuint mv_location = glGetUniformLocation(gShader.GetProgram(), "mv_matrix");
+	GLuint proj_location = glGetUniformLocation(gShader.GetProgram(), "proj_matrix");
+	
+	double gTime = 0.0;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window)) {
 		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClearBufferfv(GL_COLOR, 0, glm::value_ptr(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+
+		glUseProgram(gShader.GetProgram());
+
+		float f = (float)gTime * (float)glm::pi<float>() * 0.25f;
+
+		glm::mat4 mv_matrix = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, -8.0));
+		mv_matrix *= glm::rotate(mv_matrix, f, glm::vec3(0.0, 1.0, 0.0));
+
+		glUniformMatrix4fv(mv_location, 1, GL_FALSE, glm::value_ptr(mv_matrix));
+		glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
 		glDrawArrays(GL_TRIANGLES, 0, gModel.GetVertices().size());
 

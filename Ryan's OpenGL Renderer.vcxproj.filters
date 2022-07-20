@@ -85,5 +85,11 @@
     <None Include="chapter05s01.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="chapter05s02.vert">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="chapter05s02.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

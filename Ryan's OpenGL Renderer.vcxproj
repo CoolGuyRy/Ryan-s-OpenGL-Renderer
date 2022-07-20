@@ -156,6 +156,8 @@
     <None Include="chapter03s03.frag" />
     <None Include="chapter05s01.frag" />
     <None Include="chapter05s01.vert" />
+    <None Include="chapter05s02.frag" />
+    <None Include="chapter05s02.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
