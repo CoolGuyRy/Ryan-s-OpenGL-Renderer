@@ -5,8 +5,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/constants.hpp>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "Libraries/stb/stb_image.h"
+
 #include "Shader.h"
-#include "Model.h"
+#include "Mesh.h"
 
 /*
 
@@ -21,6 +24,7 @@ struct input {
 	bool A = false;
 	bool S = false;
 	bool D = false;
+	bool SPACE = false;
 } gInput;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
@@ -34,6 +38,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		gInput.S = true;
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
 		gInput.D = true;
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+		gInput.SPACE = true;
+	
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE)
 		gInput.W = false;
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE)
@@ -42,6 +49,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		gInput.S = false;
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE)
 		gInput.D = false;
+	if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE)
+		gInput.SPACE = false;
 }
 
 int main(void) {
@@ -84,10 +93,40 @@ int main(void) {
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	Model gModel("Models/bugati.obj");
-	gModel.Build();
+	std::vector<std::string> MeshList; unsigned meshListIndex = 0;
+	MeshList.push_back("Data/Models/ivan.obj");
+	MeshList.push_back("Data/Models/f22.obj");
+	MeshList.push_back("Data/Models/crab.obj");
+	MeshList.push_back("Data/Models/drone.obj");
+	MeshList.push_back("Data/Models/efa.obj");
+	MeshList.push_back("Data/Models/f117.obj");
+	MeshList.push_back("Data/Models/bunny.obj");
+	MeshList.push_back("Data/Models/cube.obj"); 
+	MeshList.push_back("Data/Models/suzanne.obj");
+	MeshList.push_back("Data/Models/teapot.obj");
+	MeshList.push_back("Data/Models/cow.obj");
+	MeshList.push_back("Data/Models/dragon.obj");
+	MeshList.push_back("Data/Models/lucy.obj");
+	MeshList.push_back("Data/Models/nefertiti.obj");
+	MeshList.push_back("Data/Models/triangle.obj");
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	Mesh gMesh(MeshList.at(meshListIndex));
+	gMesh.Build();
+
+	stbi_set_flip_vertically_on_load(true);
+	
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("Data/Textures/ivan.jpg", &width, &height, &nrChannels, 3);
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, width, height);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	stbi_image_free(data);
+
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glm::mat4 proj_matrix = glm::perspective(glm::radians(45.0f), 1280.0f / 960.0f, 0.1f, 100.0f);
 	glm::mat4 mv_matrix = glm::mat4(1.0);
@@ -124,22 +163,31 @@ int main(void) {
 			cameraPos.z -= 0.1f;
 		}
 		if (gInput.A) {
-			cameraPos.x -= 0.1;
+			cameraPos.x -= 0.1f;
 		}
 		if (gInput.S) {
 			cameraPos.z += 0.1f;
 		}
 		if (gInput.D) {
-			cameraPos.x += 0.1;
+			cameraPos.x += 0.1f;
+		}
+		if (gInput.SPACE) {
+			meshListIndex = (meshListIndex + 1) % MeshList.size();
+
+			gMesh.Load(MeshList.at(meshListIndex));
+			gMesh.Build();
+			
+			gInput.SPACE = false;
 		}
 
-		mv_matrix = glm::translate(glm::mat4(1.0), cameraPos);
-		mv_matrix *= glm::rotate(mv_matrix, f, glm::vec3(1.0, 1.0, 1.0));
+		mv_matrix = glm::scale(glm::mat4(1.0), glm::vec3(1.0, 1.0, 1.0));
+		mv_matrix = glm::translate(mv_matrix, cameraPos);
+		mv_matrix *= glm::rotate(mv_matrix, f, glm::vec3(0.0, 1.0, 0.0));
 
 		glUniformMatrix4fv(mv_location, 1, GL_FALSE, glm::value_ptr(mv_matrix));
 		glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
-		glDrawArrays(GL_TRIANGLES, 0, gModel.GetVertices().size());
+		glDrawArrays(GL_TRIANGLES, 0, gMesh.GetVertices().size());
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
