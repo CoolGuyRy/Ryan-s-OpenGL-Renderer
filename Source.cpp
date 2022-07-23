@@ -6,10 +6,9 @@
 #include <glm/gtc/constants.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "Libraries/stb/stb_image.h"
 
 #include "Shader.h"
-#include "Mesh.h"
+#include "Model.h"
 
 /*
 
@@ -73,6 +72,9 @@ int main(void) {
 		return -1;
 	}
 
+	/* Fix stbi image flip way before loading any images */
+	stbi_set_flip_vertically_on_load(true);
+
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
@@ -89,42 +91,19 @@ int main(void) {
 	gShader.AddShader("chapter05s02.frag", GL_FRAGMENT_SHADER);
 	gShader.Build();
 
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	std::vector<std::pair<std::string, std::string>> gModelPaths; unsigned int gModelIter = 0;
+	gModelPaths.push_back(std::make_pair("Data/Models/cube.obj", "Data/Textures/container.jpg"));
+	gModelPaths.push_back(std::make_pair("Data/Models/cube.obj", "Data/Textures/grass.jpg"));
+	gModelPaths.push_back(std::make_pair("Data/Models/bunny.obj", "Data/Textures/bunny.jpg"));
+	gModelPaths.push_back(std::make_pair("Data/Models/crab.obj", "Data/Textures/crab.png"));
+	gModelPaths.push_back(std::make_pair("Data/Models/drone.obj", "Data/Textures/drone.png"));
+	gModelPaths.push_back(std::make_pair("Data/Models/efa.obj", "Data/Textures/efa.png"));
+	gModelPaths.push_back(std::make_pair("Data/Models/f22.obj", "Data/Textures/f22.png"));
+	gModelPaths.push_back(std::make_pair("Data/Models/f117.obj", "Data/Textures/f117.png"));
+	gModelPaths.push_back(std::make_pair("Data/Models/ivan.obj", "Data/Textures/ivan.jpg"));
 
-	std::vector<std::string> MeshList; unsigned meshListIndex = 0;
-	MeshList.push_back("Data/Models/ivan.obj");
-	MeshList.push_back("Data/Models/f22.obj");
-	MeshList.push_back("Data/Models/crab.obj");
-	MeshList.push_back("Data/Models/drone.obj");
-	MeshList.push_back("Data/Models/efa.obj");
-	MeshList.push_back("Data/Models/f117.obj");
-	MeshList.push_back("Data/Models/bunny.obj");
-	MeshList.push_back("Data/Models/cube.obj"); 
-	MeshList.push_back("Data/Models/suzanne.obj");
-	MeshList.push_back("Data/Models/teapot.obj");
-	MeshList.push_back("Data/Models/cow.obj");
-	MeshList.push_back("Data/Models/dragon.obj");
-	MeshList.push_back("Data/Models/lucy.obj");
-	MeshList.push_back("Data/Models/nefertiti.obj");
-	MeshList.push_back("Data/Models/triangle.obj");
-
-	Mesh gMesh(MeshList.at(meshListIndex));
-	gMesh.Build();
-
-	stbi_set_flip_vertically_on_load(true);
 	
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load("Data/Textures/ivan.jpg", &width, &height, &nrChannels, 3);
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, width, height);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-	stbi_image_free(data);
+	Model gModel(gModelPaths.at(gModelIter).first, gModelPaths.at(gModelIter).second);
 
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -172,10 +151,11 @@ int main(void) {
 			cameraPos.x += 0.1f;
 		}
 		if (gInput.SPACE) {
-			meshListIndex = (meshListIndex + 1) % MeshList.size();
-
-			gMesh.Load(MeshList.at(meshListIndex));
-			gMesh.Build();
+			gModelIter = (gModelIter + 1) % gModelPaths.size();
+			
+			gModel.LoadMesh(gModelPaths.at(gModelIter).first);
+			gModel.LoadTexture(gModelPaths.at(gModelIter).second);
+			gModel.Build();
 			
 			gInput.SPACE = false;
 		}
@@ -187,7 +167,7 @@ int main(void) {
 		glUniformMatrix4fv(mv_location, 1, GL_FALSE, glm::value_ptr(mv_matrix));
 		glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
-		glDrawArrays(GL_TRIANGLES, 0, gMesh.GetVertices().size());
+		gModel.Draw();
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
