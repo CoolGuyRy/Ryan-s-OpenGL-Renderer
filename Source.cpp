@@ -153,9 +153,7 @@ int main(void) {
 		if (gInput.SPACE) {
 			gModelIter = (gModelIter + 1) % gModelPaths.size();
 			
-			gModel.LoadMesh(gModelPaths.at(gModelIter).first);
-			gModel.LoadTexture(gModelPaths.at(gModelIter).second);
-			gModel.Build();
+			gModel.Load(gModelPaths.at(gModelIter).first, gModelPaths.at(gModelIter).second);
 			
 			gInput.SPACE = false;
 		}

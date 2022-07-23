@@ -14,6 +14,12 @@ Model::Model(std::string objFile, std::string texFile) {
 	Build();
 }
 
+void Model::Load(std::string objFile, std::string texFile) {
+	LoadMesh(objFile);
+	LoadTexture(texFile);
+	Build();
+}
+
 void Model::LoadMesh(std::string objFile) {
 	Clear();
 	std::ifstream file(objFile);

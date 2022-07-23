@@ -33,12 +33,13 @@ public:
 	Model(std::string);
 	Model(std::string, std::string);
 
-	void LoadMesh(std::string);
-	void LoadTexture(std::string);
+	void Load(std::string, std::string);
 
 	void Draw();
-	void Build();
 private:
+	void LoadMesh(std::string);
+	void LoadTexture(std::string);
+	void Build();
 	void Clear();
 	
 	GLuint mVAO, mVertexBuffer, mNormalBuffer, mTexBuffer;
