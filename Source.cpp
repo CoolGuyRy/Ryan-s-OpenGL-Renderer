@@ -110,8 +110,7 @@ int main(void) {
 	glm::mat4 proj_matrix = glm::perspective(glm::radians(45.0f), 1280.0f / 960.0f, 0.1f, 100.0f);
 	glm::mat4 mv_matrix = glm::mat4(1.0);
 
-	GLuint mv_location = glGetUniformLocation(gShader.GetProgram(), "mv_matrix");
-	GLuint proj_location = glGetUniformLocation(gShader.GetProgram(), "proj_matrix");
+	GLuint mvp_location = glGetUniformLocation(gShader.GetProgram(), "mvp");
 
 	double gTime = 0.0;
 
@@ -127,15 +126,11 @@ int main(void) {
 	while (!glfwWindowShouldClose(window)) {
 		/* Poll for and process events */
 		glfwPollEvents();
-		
-		GLfloat one = 1.0f;
 
 		/* Render here */
 		glClearBufferfv(GL_COLOR, 0, glm::value_ptr(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
-		glClearBufferfv(GL_DEPTH, 0, &one);
+		glClearBufferfv(GL_DEPTH, 0, glm::value_ptr(glm::vec4(1.0f)));
 		
-		glUseProgram(gShader.GetProgram());
-
 		float f = (float)gTime * (float)glm::pi<float>() * 0.25f;
 
 		if (gInput.W) {
@@ -162,8 +157,11 @@ int main(void) {
 		mv_matrix = glm::translate(mv_matrix, cameraPos);
 		mv_matrix *= glm::rotate(mv_matrix, f, glm::vec3(0.0, 1.0, 0.0));
 
-		glUniformMatrix4fv(mv_location, 1, GL_FALSE, glm::value_ptr(mv_matrix));
-		glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		glUseProgram(gShader.GetProgram());
+
+		glm::mat4 mvp = proj_matrix * mv_matrix;
+
+		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(mvp));
 
 		gModel.Draw();
 

@@ -6,11 +6,10 @@ layout (location = 1) in vec2 aTexCoord;
 out vec2 TexCoord;
 out vec4 vs_color;
 
-uniform mat4 mv_matrix;
-uniform mat4 proj_matrix;
+uniform mat4 mvp;
 
 void main(void) {
-	gl_Position = proj_matrix * mv_matrix * vec4(aPos, 1.0);
+	gl_Position = mvp * vec4(aPos, 1.0);
 	vs_color = gl_Position;
 	TexCoord = aTexCoord;
 }

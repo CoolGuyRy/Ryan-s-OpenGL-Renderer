@@ -137,8 +137,13 @@ void Model::LoadTexture(std::string texFile) {
 }
 
 void Model::Draw() {
+	// glUseProgram() should be getting called here...
+
 	glBindVertexArray(mVAO);
 	glBindTexture(GL_TEXTURE_2D, mTexture);
+
+	// Uniforms should be modified here
+	
 	glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindVertexArray(0);

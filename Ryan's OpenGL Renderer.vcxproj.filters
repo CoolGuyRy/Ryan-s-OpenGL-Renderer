@@ -22,6 +22,12 @@
     <Filter Include="Source Files\Model">
       <UniqueIdentifier>{28b49588-441d-467a-ad77-31f07162ede4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Renderer">
+      <UniqueIdentifier>{3d25c725-4ade-4027-8221-8cf9fd9a9c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{da08f4d0-87c3-45f5-b549-3ca1dbe94128}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -36,6 +42,12 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -43,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Source Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Source Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

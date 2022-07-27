@@ -7,6 +7,8 @@
 #include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include "Libraries/stb/stb_image.h"
 
@@ -41,6 +43,8 @@ private:
 	void LoadTexture(std::string);
 	void Build();
 	void Clear();
+
+	glm::vec3 mPosition, mRotation, mScale;
 	
 	GLuint mVAO, mVertexBuffer, mNormalBuffer, mTexBuffer;
 	
