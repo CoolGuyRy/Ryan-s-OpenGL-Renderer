@@ -11,6 +11,14 @@
 #include "Shader.h"
 #include "Model.h"
 
+struct InputContainer {
+	bool W;
+	bool A;
+	bool S;
+	bool D;
+	bool SPACE;
+};
+
 void KeyCallback(GLFWwindow*, int, int, int, int);
 
 class Renderer {
@@ -28,6 +36,7 @@ private:
 	std::vector<Model> mModels;
 
 	GLFWwindow* mWindow;
+	InputContainer mInput;
 	unsigned mWidth, mHeight;
 	double mTime;
 };
