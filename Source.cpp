@@ -87,8 +87,8 @@ int main(void) {
 	}
 
 	Shader gShader;
-	gShader.AddShader("chapter05s02.vert", GL_VERTEX_SHADER);
-	gShader.AddShader("chapter05s02.frag", GL_FRAGMENT_SHADER);
+	gShader.AddShader("Data/Shaders/chapter05s02.vert", GL_VERTEX_SHADER);
+	gShader.AddShader("Data/Shaders/chapter05s02.frag", GL_FRAGMENT_SHADER);
 	gShader.Build();
 
 	std::vector<std::pair<std::string, std::string>> gModelPaths; unsigned int gModelIter = 0;
