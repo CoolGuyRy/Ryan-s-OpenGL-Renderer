@@ -19,14 +19,8 @@
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{165d72d6-662e-411e-9cd0-d6b44e2fb1b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Model">
-      <UniqueIdentifier>{28b49588-441d-467a-ad77-31f07162ede4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Renderer">
-      <UniqueIdentifier>{3d25c725-4ade-4027-8221-8cf9fd9a9c74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Camera">
-      <UniqueIdentifier>{da08f4d0-87c3-45f5-b549-3ca1dbe94128}</UniqueIdentifier>
+    <Filter Include="Source Files\Display">
+      <UniqueIdentifier>{3b93ec59-d2d7-4407-97f9-1e7b0729e43b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,74 +33,62 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Camera</Filter>
+    <ClCompile Include="Display.cpp">
+      <Filter>Source Files\Display</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>Source Files\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Source Files\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Source Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Source Files\Camera</Filter>
+    <ClInclude Include="Display.h">
+      <Filter>Source Files\Display</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="chapter02s01.vert">
+    <None Include="Data\Shaders\chapter02s01.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter02s01.frag">
+    <None Include="Data\Shaders\chapter02s01.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter02s02.vert">
+    <None Include="Data\Shaders\chapter02s02.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s01.vert">
+    <None Include="Data\Shaders\chapter03s01.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s01.frag">
+    <None Include="Data\Shaders\chapter03s01.geom">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s01.tesc">
+    <None Include="Data\Shaders\chapter03s01.tesc">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s01.tese">
+    <None Include="Data\Shaders\chapter03s01.tese">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s01.geom">
+    <None Include="Data\Shaders\chapter03s01.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s02.frag">
+    <None Include="Data\Shaders\chapter03s02.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s02.vert">
+    <None Include="Data\Shaders\chapter03s02.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter03s03.frag">
+    <None Include="Data\Shaders\chapter03s03.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter05s01.vert">
+    <None Include="Data\Shaders\chapter05s01.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter05s01.frag">
+    <None Include="Data\Shaders\chapter05s01.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter05s02.vert">
+    <None Include="Data\Shaders\chapter05s02.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="chapter05s02.frag">
+    <None Include="Data\Shaders\chapter05s02.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>
