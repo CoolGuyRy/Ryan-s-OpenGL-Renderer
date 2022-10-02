@@ -10,8 +10,6 @@ Display::~Display() {
 
 void Display::Init() {
 
-	glfwSetErrorCallback(ErrorCallback);
-
 	if (!glfwInit()) {
 		std::cout << "Error: Failed to initialize GLFW" << std::endl;
 		return;
@@ -28,8 +26,6 @@ void Display::Init() {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-
-	glfwSetKeyCallback(mWindow, KeyCallback);
 
 	glfwMakeContextCurrent(mWindow);
 
