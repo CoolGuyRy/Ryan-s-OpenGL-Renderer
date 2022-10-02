@@ -133,18 +133,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Display.cpp" />
     <ClCompile Include="Libraries\GLAD\src\glad.c" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="chapter02s01.frag" />
@@ -162,6 +153,9 @@
     <None Include="chapter05s01.vert" />
     <None Include="chapter05s02.frag" />
     <None Include="chapter05s02.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Display.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
