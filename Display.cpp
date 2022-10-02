@@ -35,5 +35,9 @@ void Display::Init() {
 		exit(EXIT_FAILURE);
 	}
 
+	if (glfwRawMouseMotionSupported())
+		glfwSetInputMode(mWindow, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+	glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	glfwSwapInterval(1);
 }
