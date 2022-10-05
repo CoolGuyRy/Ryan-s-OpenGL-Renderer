@@ -1,6 +1,7 @@
 #include <iostream>
-#include "Display.h"
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Display.h"
 
 struct InputContainer {
 	int W = GLFW_RELEASE;
@@ -9,28 +10,41 @@ struct InputContainer {
 	int D = GLFW_RELEASE;
 	int SPACE = GLFW_RELEASE;
 	int ESCAPE = GLFW_RELEASE;
+	
 	int MOUSE_LEFT = GLFW_RELEASE;
 	int MOUSE_RIGHT = GLFW_RELEASE;
 	int MOUSE_MIDDLE = GLFW_RELEASE;
 	
 	double MOUSE_X = 0;
 	double MOUSE_Y = 0;
-	int MOUSE_SCROLL = 0;
+	double MOUSE_SCROLL = 0;
 } gInput;
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	switch (key) {
 	case GLFW_KEY_W:
-		gInput.W = action;
+		if (action == GLFW_PRESS)
+			gInput.W = GLFW_PRESS;
+		else if (action == GLFW_RELEASE)
+			gInput.W = GLFW_RELEASE;
 		break;
 	case GLFW_KEY_A:
-		gInput.A = action;
+		if (action == GLFW_PRESS)
+			gInput.A = GLFW_PRESS;
+		else if (action == GLFW_RELEASE)
+			gInput.A = GLFW_RELEASE;
 		break;
 	case GLFW_KEY_S:
-		gInput.S = action;
+		if (action == GLFW_PRESS)
+			gInput.S = GLFW_PRESS;
+		else if (action == GLFW_RELEASE)
+			gInput.S = GLFW_RELEASE;
 		break;
 	case GLFW_KEY_D:
-		gInput.D = action;
+		if (action == GLFW_PRESS)
+			gInput.D = GLFW_PRESS;
+		else if (action == GLFW_RELEASE)
+			gInput.D = GLFW_RELEASE;
 		break;
 	case GLFW_KEY_SPACE:
 		gInput.SPACE = action;
@@ -69,13 +83,12 @@ void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 	// std::cout << "Mouse Scroll: " << xoffset << ", " << yoffset << std::endl;
 }
 void ErrorCallback(int error, const char* description) {
-	std::cout << "Error: " << description << std::endl;
+	std::cout << "Error " << error << ": " << description << std::endl;
 }
 
 int main() {
-
 	Display gDisplay(1280, 960, "OpenGL Renderer");
-	
+
 	glfwSetErrorCallback(ErrorCallback);
 	glfwSetKeyCallback(gDisplay.GetWindow(), KeyCallback);
 	glfwSetCursorPosCallback(gDisplay.GetWindow(), CursorPositionCallback);
@@ -84,12 +97,10 @@ int main() {
 
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {
 		glfwPollEvents();
-		
-		if (gInput.ESCAPE == GLFW_PRESS)
-			glfwSetWindowShouldClose(gDisplay.GetWindow(), GLFW_TRUE);
 
 		glClearBufferfv(GL_COLOR, 0, glm::value_ptr(glm::vec4(0.09, 0.22, 0.34, 1.0)));
-
+		glClearBufferfv(GL_DEPTH, 0, glm::value_ptr(glm::vec4(1.0)));
+		
 		glfwSwapBuffers(gDisplay.GetWindow());
 	}
 	

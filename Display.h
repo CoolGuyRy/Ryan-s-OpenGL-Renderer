@@ -28,6 +28,8 @@ public:
 	int GetHeight() { return mHeight; }
 	std::string GetTitle() { return mTitle; }
 private:
+	void LogContextInfo();
+	
 	GLFWwindow* mWindow;
 	int mWidth, mHeight;
 	std::string mTitle;
