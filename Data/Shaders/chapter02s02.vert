@@ -7,5 +7,3 @@ void main(void) {
 									
 	gl_Position = vertices[gl_VertexID];
 }
-
-// This is a shader that creates a triangle.

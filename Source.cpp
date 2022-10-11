@@ -1,106 +1,156 @@
 #include <iostream>
+#include <vector>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Display.h"
-
-struct InputContainer {
-	int W = GLFW_RELEASE;
-	int A = GLFW_RELEASE;
-	int S = GLFW_RELEASE;
-	int D = GLFW_RELEASE;
-	int SPACE = GLFW_RELEASE;
-	int ESCAPE = GLFW_RELEASE;
-	
-	int MOUSE_LEFT = GLFW_RELEASE;
-	int MOUSE_RIGHT = GLFW_RELEASE;
-	int MOUSE_MIDDLE = GLFW_RELEASE;
-	
-	double MOUSE_X = 0;
-	double MOUSE_Y = 0;
-	double MOUSE_SCROLL = 0;
-} gInput;
+#include "Shader.h"
+#include "Texture.h"
+#include "Camera.h"
+#include "Mesh.h"
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	switch (key) {
-	case GLFW_KEY_W:
-		if (action == GLFW_PRESS)
-			gInput.W = GLFW_PRESS;
-		else if (action == GLFW_RELEASE)
-			gInput.W = GLFW_RELEASE;
-		break;
-	case GLFW_KEY_A:
-		if (action == GLFW_PRESS)
-			gInput.A = GLFW_PRESS;
-		else if (action == GLFW_RELEASE)
-			gInput.A = GLFW_RELEASE;
-		break;
-	case GLFW_KEY_S:
-		if (action == GLFW_PRESS)
-			gInput.S = GLFW_PRESS;
-		else if (action == GLFW_RELEASE)
-			gInput.S = GLFW_RELEASE;
-		break;
-	case GLFW_KEY_D:
-		if (action == GLFW_PRESS)
-			gInput.D = GLFW_PRESS;
-		else if (action == GLFW_RELEASE)
-			gInput.D = GLFW_RELEASE;
-		break;
-	case GLFW_KEY_SPACE:
-		gInput.SPACE = action;
-		break;
-	case GLFW_KEY_ESCAPE:
-		gInput.ESCAPE = action;
-		break;
-	default:
-		break;
-	}
-	// std::cout << "Key: " << key << " Action: " << action << std::endl;
+	
 }
 void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
-	gInput.MOUSE_X = xpos;
-	gInput.MOUSE_Y = ypos;
-	// std::cout << "X: " << xpos << " Y: " << ypos << std::endl;
+
 }
 void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-	switch (button) {
-		case GLFW_MOUSE_BUTTON_LEFT:
-			gInput.MOUSE_LEFT = action;
-			break;
-		case GLFW_MOUSE_BUTTON_RIGHT:
-			gInput.MOUSE_RIGHT = action;
-			break;
-		case GLFW_MOUSE_BUTTON_MIDDLE:
-			gInput.MOUSE_MIDDLE = action;
-			break;
-		default:
-			break;
-	}
-	// std::cout << "Mouse Button: " << button << " Action: " << action << std::endl;
+	
 }
 void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-	gInput.MOUSE_SCROLL = yoffset;
-	// std::cout << "Mouse Scroll: " << xoffset << ", " << yoffset << std::endl;
+
+}
+void FrameBufferSizeCallback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
 }
 void ErrorCallback(int error, const char* description) {
 	std::cout << "Error " << error << ": " << description << std::endl;
 }
+void WindowSetup(Display& d) {
+	glfwSetErrorCallback(ErrorCallback);
+	glfwSetKeyCallback(d.GetWindow(), KeyCallback);
+	glfwSetCursorPosCallback(d.GetWindow(), CursorPositionCallback);
+	glfwSetMouseButtonCallback(d.GetWindow(), MouseButtonCallback);
+	glfwSetScrollCallback(d.GetWindow(), MouseScrollCallback);
+	glfwSetFramebufferSizeCallback(d.GetWindow(), FrameBufferSizeCallback);
+
+	stbi_set_flip_vertically_on_load(true);
+}
+
+struct Entity {
+	Entity() {
+		position = glm::vec3(0.0f);
+		rotation = glm::vec3(0.0f);
+		scale = glm::vec3(1.0f);
+	}
+	Entity(glm::vec3 p) {
+		position = p;
+		rotation = glm::vec3(0.0f);
+		scale = glm::vec3(1.0f);
+	}
+	Entity(glm::vec3 p, glm::vec3 r) {
+		position = p;
+		rotation = r;
+		scale = glm::vec3(1.0f);
+	}
+	Entity(glm::vec3 p, glm::vec3 r, glm::vec3 s) {
+		position = p;
+		rotation = r;
+		scale = s;
+	}
+
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale;
+
+	glm::mat4 getWorldMatrix() {
+		glm::mat4 result(1.0f);
+
+		result = glm::translate(result, position);
+		result = glm::rotate(result, rotation.x, glm::vec3(1.0, 0.0, 0.0));
+		result = glm::rotate(result, rotation.y, glm::vec3(0.0, 1.0, 0.0));
+		result = glm::rotate(result, rotation.z, glm::vec3(0.0, 0.0, 1.0));
+		result = glm::scale(result, scale);
+
+		return result;
+	}
+};
 
 int main() {
+	srand((unsigned)time(NULL));
+	//Display gDisplay("OpenGL Renderer");
 	Display gDisplay(1280, 960, "OpenGL Renderer");
 
-	glfwSetErrorCallback(ErrorCallback);
-	glfwSetKeyCallback(gDisplay.GetWindow(), KeyCallback);
-	glfwSetCursorPosCallback(gDisplay.GetWindow(), CursorPositionCallback);
-	glfwSetMouseButtonCallback(gDisplay.GetWindow(), MouseButtonCallback);
-	glfwSetScrollCallback(gDisplay.GetWindow(), MouseScrollCallback);
+	WindowSetup(gDisplay);
+
+	Shader gShader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag");
+	Shader lShader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag");
+
+	Texture gTexture("Data/Textures/brick_diffuse.png");
+	Texture hTexture("Data/Textures/happyface.png");
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, gTexture.GetTexture());
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, hTexture.GetTexture());
+
+	Mesh gMesh("Data/Models/cube.obj");
+
+	glBindVertexArray(gMesh.GetVAO());
+	glBindBuffer(GL_ARRAY_BUFFER, gMesh.GetVBO());
+
+	GLuint CmodelLoc = glGetUniformLocation(gShader.GetProgram(), "model");
+	GLuint CviewLoc = glGetUniformLocation(gShader.GetProgram(), "view");
+	GLuint CprojLoc = glGetUniformLocation(gShader.GetProgram(), "proj");
+	GLuint LmodelLoc = glGetUniformLocation(lShader.GetProgram(), "model");
+	GLuint LviewLoc = glGetUniformLocation(lShader.GetProgram(), "view");
+	GLuint LprojLoc = glGetUniformLocation(lShader.GetProgram(), "proj");
+
+	Camera gCamera(gDisplay.GetWindow(), glm::vec3(0.0, 0.0, 20.0), glm::vec3(0.0f, 0.0f, -1.0f));
+
+	Entity cube(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0f, 45.0f, 0.0f));
+	Entity lightSource(glm::vec3(8.0, 1.0, -8.0), glm::vec3(0.0), glm::vec3(0.25));
+
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
+
+	float deltaTime = 0.0f;
+	float lastFrame = 0.0f;
 
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {
 		glfwPollEvents();
 
 		glClearBufferfv(GL_COLOR, 0, glm::value_ptr(glm::vec4(0.09, 0.22, 0.34, 1.0)));
 		glClearBufferfv(GL_DEPTH, 0, glm::value_ptr(glm::vec4(1.0)));
+
+		if (glfwGetKey(gDisplay.GetWindow(), GLFW_KEY_ESCAPE))
+			glfwSetWindowShouldClose(gDisplay.GetWindow(), GL_TRUE);
+		gCamera.Update(deltaTime);
+
+		gShader.Use();
+
+		glUniformMatrix4fv(CviewLoc, 1, GL_FALSE, glm::value_ptr(gCamera.GetViewMatrix()));
+		glUniformMatrix4fv(CprojLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		
+		glUniform1i(glGetUniformLocation(gShader.GetProgram(), "mTex"), 0);
+		glUniform1i(glGetUniformLocation(gShader.GetProgram(), "hTex"), 1);
+		
+		glUniformMatrix4fv(CmodelLoc, 1, GL_FALSE, glm::value_ptr(cube.getWorldMatrix()));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		lShader.Use();
+
+		glUniformMatrix4fv(LviewLoc, 1, GL_FALSE, glm::value_ptr(gCamera.GetViewMatrix()));
+		glUniformMatrix4fv(LprojLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		glUniformMatrix4fv(LmodelLoc, 1, GL_FALSE, glm::value_ptr(lightSource.getWorldMatrix()));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		
+		float currentFrame = (float)glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		glfwSwapBuffers(gDisplay.GetWindow());
 	}
 	

@@ -18,6 +18,7 @@
 
 class Display {
 public:
+	Display(std::string);
 	Display(int, int, std::string);
 	~Display();
 
