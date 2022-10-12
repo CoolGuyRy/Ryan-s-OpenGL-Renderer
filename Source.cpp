@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "Mesh.h"
+#include "Model.h"
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	
@@ -83,41 +84,16 @@ int main() {
 
 	WindowSetup(gDisplay);
 
-	Shader gShader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag");
-	Shader lShader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag");
-
-	Texture gTexture("Data/Textures/brick_diffuse.png");
-	Texture hTexture("Data/Textures/happyface.png");
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, gTexture.GetTexture());
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, hTexture.GetTexture());
-
-	Mesh gMesh("Data/Models/cube.obj");
-
-	glBindVertexArray(gMesh.GetVAO());
-	glBindBuffer(GL_ARRAY_BUFFER, gMesh.GetVBO());
-
-	GLuint CmodelLoc = glGetUniformLocation(gShader.GetProgram(), "model");
-	GLuint CviewLoc = glGetUniformLocation(gShader.GetProgram(), "view");
-	GLuint CprojLoc = glGetUniformLocation(gShader.GetProgram(), "proj");
-	GLuint LmodelLoc = glGetUniformLocation(lShader.GetProgram(), "model");
-	GLuint LviewLoc = glGetUniformLocation(lShader.GetProgram(), "view");
-	GLuint LprojLoc = glGetUniformLocation(lShader.GetProgram(), "proj");
-
 	Camera gCamera(gDisplay.GetWindow(), glm::vec3(0.0, 0.0, 20.0), glm::vec3(0.0f, 0.0f, -1.0f));
-
-	Entity cube(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0f, 45.0f, 0.0f));
-	Entity lightSource(glm::vec3(8.0, 1.0, -8.0), glm::vec3(0.0), glm::vec3(0.25));
 
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
 
-	float deltaTime = 0.0f;
-	float lastFrame = 0.0f;
+	Model gModel(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/brick_diffuse.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(0.0, 0.0, -5.0));
+	Model lModel(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/brick_diffuse.png"), new Shader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag"), glm::vec3(10.0, 0.0, -10.0));
 
+
+	float deltaTime = 0.0f, lastFrame = 0.0f;
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {
 		glfwPollEvents();
 
@@ -128,24 +104,8 @@ int main() {
 			glfwSetWindowShouldClose(gDisplay.GetWindow(), GL_TRUE);
 		gCamera.Update(deltaTime);
 
-		gShader.Use();
-
-		glUniformMatrix4fv(CviewLoc, 1, GL_FALSE, glm::value_ptr(gCamera.GetViewMatrix()));
-		glUniformMatrix4fv(CprojLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		
-		glUniform1i(glGetUniformLocation(gShader.GetProgram(), "mTex"), 0);
-		glUniform1i(glGetUniformLocation(gShader.GetProgram(), "hTex"), 1);
-		
-		glUniformMatrix4fv(CmodelLoc, 1, GL_FALSE, glm::value_ptr(cube.getWorldMatrix()));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		lShader.Use();
-
-		glUniformMatrix4fv(LviewLoc, 1, GL_FALSE, glm::value_ptr(gCamera.GetViewMatrix()));
-		glUniformMatrix4fv(LprojLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-		glUniformMatrix4fv(LmodelLoc, 1, GL_FALSE, glm::value_ptr(lightSource.getWorldMatrix()));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		gModel.Draw();
+		lModel.Draw();
 		
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;

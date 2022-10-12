@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Mesh">
       <UniqueIdentifier>{c1753ba7-661d-4a02-9231-08b3a127cb20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{7792f3df-61a4-461e-8603-1c4cbe3f7cd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -60,6 +63,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -76,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Source Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Source Files\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

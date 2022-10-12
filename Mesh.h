@@ -32,6 +32,8 @@ public:
 	GLuint GetEBO() { return mEBO; }
 	GLuint GetNBO() { return mNBO; }
 	GLuint GetTBO() { return mTBO; }
+
+	GLuint GetVertexCount() { return mVertices.size(); }
 private:
 	void Clear();
 	

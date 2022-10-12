@@ -145,6 +145,14 @@ void Mesh::Build() {
 		glEnableVertexAttribArray(1);
 	}
 
+	if (mNormals.size() != 0) {
+		glGenBuffers(1, &mNBO);
+		glBindBuffer(GL_ARRAY_BUFFER, mNBO);
+		glBufferData(GL_ARRAY_BUFFER, mNormals.size() * sizeof(glm::vec3), &mNormals[0], GL_STATIC_DRAW);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+		glEnableVertexAttribArray(2);
+	}
+
 	glBindVertexArray(0);
 }
 
