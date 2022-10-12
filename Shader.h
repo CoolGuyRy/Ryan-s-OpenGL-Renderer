@@ -7,23 +7,17 @@
 #include <string>
 #include <fstream>
 
-/*
-
-	TODO: 
-
-	
-*/
-
 class Shader {
 public:
 	Shader();
+	Shader(std::string, std::string);
 	~Shader();
 
-	void AddShader(std::string, GLenum);
+	void Add(std::string, GLenum);
 	void Build();
+	void Use() { glUseProgram(mProgram); }
 
-	GLuint GetProgram();
-
+	GLuint GetProgram() { return mProgram; }
 private:
 	GLuint mProgram;
 	std::vector<GLuint> mShaders;

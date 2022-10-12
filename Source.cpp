@@ -1,184 +1,118 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
-#include <glm/glm.hpp>
+#include <vector>
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/constants.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
-
+#include "Display.h"
 #include "Shader.h"
+#include "Texture.h"
+#include "Camera.h"
+#include "Mesh.h"
 #include "Model.h"
 
-/*
-
-	TODO:
-
-	- Make a window class to clean up this main mess.
-
-*/
-
-struct input {
-	bool W = false;
-	bool A = false;
-	bool S = false;
-	bool D = false;
-	bool SPACE = false;
-} gInput;
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key == GLFW_KEY_W && action == GLFW_PRESS)
-		gInput.W = true;
-	if (key == GLFW_KEY_A && action == GLFW_PRESS)
-		gInput.A = true;
-	if (key == GLFW_KEY_S && action == GLFW_PRESS)
-		gInput.S = true;
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
-		gInput.D = true;
-	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-		gInput.SPACE = true;
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	
-	if (key == GLFW_KEY_W && action == GLFW_RELEASE)
-		gInput.W = false;
-	if (key == GLFW_KEY_A && action == GLFW_RELEASE)
-		gInput.A = false;
-	if (key == GLFW_KEY_S && action == GLFW_RELEASE)
-		gInput.S = false;
-	if (key == GLFW_KEY_D && action == GLFW_RELEASE)
-		gInput.D = false;
-	if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE)
-		gInput.SPACE = false;
+}
+void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
+
+}
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+	
+}
+void MouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+
+}
+void FrameBufferSizeCallback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+void ErrorCallback(int error, const char* description) {
+	std::cout << "Error " << error << ": " << description << std::endl;
+}
+void WindowSetup(Display& d) {
+	glfwSetErrorCallback(ErrorCallback);
+	glfwSetKeyCallback(d.GetWindow(), KeyCallback);
+	glfwSetCursorPosCallback(d.GetWindow(), CursorPositionCallback);
+	glfwSetMouseButtonCallback(d.GetWindow(), MouseButtonCallback);
+	glfwSetScrollCallback(d.GetWindow(), MouseScrollCallback);
+	glfwSetFramebufferSizeCallback(d.GetWindow(), FrameBufferSizeCallback);
+
+	stbi_set_flip_vertically_on_load(true);
 }
 
-int main(void) {
-	GLFWwindow* window;
-
-	/* Initialize the library */
-	if (!glfwInit())
-		return -1;
-
-	/* Specify Window settings / OpenGL versions to use for program */
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(1280, 960, "OpenGL Renderer", NULL, NULL);
-	if (!window) {
-		glfwTerminate();
-		return -1;
+struct Entity {
+	Entity() {
+		position = glm::vec3(0.0f);
+		rotation = glm::vec3(0.0f);
+		scale = glm::vec3(1.0f);
+	}
+	Entity(glm::vec3 p) {
+		position = p;
+		rotation = glm::vec3(0.0f);
+		scale = glm::vec3(1.0f);
+	}
+	Entity(glm::vec3 p, glm::vec3 r) {
+		position = p;
+		rotation = r;
+		scale = glm::vec3(1.0f);
+	}
+	Entity(glm::vec3 p, glm::vec3 r, glm::vec3 s) {
+		position = p;
+		rotation = r;
+		scale = s;
 	}
 
-	/* Fix stbi image flip way before loading any images */
-	stbi_set_flip_vertically_on_load(true);
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale;
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
+	glm::mat4 getWorldMatrix() {
+		glm::mat4 result(1.0f);
 
-	glfwSetKeyCallback(window, key_callback);
+		result = glm::translate(result, position);
+		result = glm::rotate(result, rotation.x, glm::vec3(1.0, 0.0, 0.0));
+		result = glm::rotate(result, rotation.y, glm::vec3(0.0, 1.0, 0.0));
+		result = glm::rotate(result, rotation.z, glm::vec3(0.0, 0.0, 1.0));
+		result = glm::scale(result, scale);
 
-	// Load pointers to OpenGL functions 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Failed to initialize OpenGL context" << std::endl;
-		return -1;
+		return result;
 	}
+};
 
-	Shader gShader;
-	gShader.AddShader("chapter05s02.vert", GL_VERTEX_SHADER);
-	gShader.AddShader("chapter05s02.frag", GL_FRAGMENT_SHADER);
-	gShader.Build();
+int main() {
+	srand((unsigned)time(NULL));
+	//Display gDisplay("OpenGL Renderer");
+	Display gDisplay(1280, 960, "OpenGL Renderer");
 
-	std::vector<std::pair<std::string, std::string>> gModelPaths; unsigned int gModelIter = 0;
-	gModelPaths.push_back(std::make_pair("Data/Models/cube.obj", "Data/Textures/container.jpg"));
-	gModelPaths.push_back(std::make_pair("Data/Models/cube.obj", "Data/Textures/grass.jpg"));
-	gModelPaths.push_back(std::make_pair("Data/Models/bunny.obj", "Data/Textures/bunny.jpg"));
-	gModelPaths.push_back(std::make_pair("Data/Models/crab.obj", "Data/Textures/crab.png"));
-	gModelPaths.push_back(std::make_pair("Data/Models/drone.obj", "Data/Textures/drone.png"));
-	gModelPaths.push_back(std::make_pair("Data/Models/efa.obj", "Data/Textures/efa.png"));
-	gModelPaths.push_back(std::make_pair("Data/Models/f22.obj", "Data/Textures/f22.png"));
-	gModelPaths.push_back(std::make_pair("Data/Models/f117.obj", "Data/Textures/f117.png"));
-	gModelPaths.push_back(std::make_pair("Data/Models/ivan.obj", "Data/Textures/ivan.jpg"));
+	WindowSetup(gDisplay);
 
-	
-	Model gModel(gModelPaths.at(gModelIter).first, gModelPaths.at(gModelIter).second);
+	Camera gCamera(gDisplay.GetWindow(), glm::vec3(0.0, 0.0, 20.0), glm::vec3(0.0f, 0.0f, -1.0f));
 
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
 
-	glm::mat4 proj_matrix = glm::perspective(glm::radians(45.0f), 1280.0f / 960.0f, 0.1f, 100.0f);
-	glm::mat4 mv_matrix = glm::mat4(1.0);
+	Model gModel(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/brick_diffuse.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(0.0, 0.0, -5.0));
+	Model lModel(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/brick_diffuse.png"), new Shader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag"), glm::vec3(10.0, 0.0, -10.0));
 
-	GLuint mv_location = glGetUniformLocation(gShader.GetProgram(), "mv_matrix");
-	GLuint proj_location = glGetUniformLocation(gShader.GetProgram(), "proj_matrix");
 
-	double gTime = 0.0;
-
-	glm::vec3 cameraPos(0.0, 0.0, -8.0);
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window)) {
-		/* Poll for and process events */
+	float deltaTime = 0.0f, lastFrame = 0.0f;
+	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {
 		glfwPollEvents();
-		
-		GLfloat one = 1.0f;
 
-		/* Render here */
-		glClearBufferfv(GL_COLOR, 0, glm::value_ptr(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
-		glClearBufferfv(GL_DEPTH, 0, &one);
-		
-		glUseProgram(gShader.GetProgram());
+		glClearBufferfv(GL_COLOR, 0, glm::value_ptr(glm::vec4(0.09, 0.22, 0.34, 1.0)));
+		glClearBufferfv(GL_DEPTH, 0, glm::value_ptr(glm::vec4(1.0)));
 
-		float f = (float)gTime * (float)glm::pi<float>() * 0.25f;
-
-		if (gInput.W) {
-			cameraPos.z -= 0.1f;
-		}
-		if (gInput.A) {
-			cameraPos.x -= 0.1f;
-		}
-		if (gInput.S) {
-			cameraPos.z += 0.1f;
-		}
-		if (gInput.D) {
-			cameraPos.x += 0.1f;
-		}
-		if (gInput.SPACE) {
-			gModelIter = (gModelIter + 1) % gModelPaths.size();
-			
-			gModel.Load(gModelPaths.at(gModelIter).first, gModelPaths.at(gModelIter).second);
-			
-			gInput.SPACE = false;
-		}
-
-		mv_matrix = glm::scale(glm::mat4(1.0), glm::vec3(1.0, 1.0, 1.0));
-		mv_matrix = glm::translate(mv_matrix, cameraPos);
-		mv_matrix *= glm::rotate(mv_matrix, f, glm::vec3(0.0, 1.0, 0.0));
-
-		glUniformMatrix4fv(mv_location, 1, GL_FALSE, glm::value_ptr(mv_matrix));
-		glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		if (glfwGetKey(gDisplay.GetWindow(), GLFW_KEY_ESCAPE))
+			glfwSetWindowShouldClose(gDisplay.GetWindow(), GL_TRUE);
+		gCamera.Update(deltaTime);
 
 		gModel.Draw();
+		lModel.Draw();
+		
+		float currentFrame = (float)glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
-
-		// Update time value
-		gTime = glfwGetTime();
+		glfwSwapBuffers(gDisplay.GetWindow());
 	}
-
-	// Properly exit glfw
-	glfwTerminate();
-
-	// Check for errors (only call if crashing immediately)
-	// std::cin.get();
 	
 	return 0;
 }

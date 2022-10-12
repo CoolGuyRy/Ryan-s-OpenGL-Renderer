@@ -133,31 +133,45 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Display.cpp" />
     <ClCompile Include="Libraries\GLAD\src\glad.c" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Display.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="chapter02s01.frag" />
-    <None Include="chapter02s01.vert" />
-    <None Include="chapter02s02.vert" />
-    <None Include="chapter03s01.frag" />
-    <None Include="chapter03s01.geom" />
-    <None Include="chapter03s01.tesc" />
-    <None Include="chapter03s01.tese" />
-    <None Include="chapter03s01.vert" />
-    <None Include="chapter03s02.frag" />
-    <None Include="chapter03s02.vert" />
-    <None Include="chapter03s03.frag" />
-    <None Include="chapter05s01.frag" />
-    <None Include="chapter05s01.vert" />
-    <None Include="chapter05s02.frag" />
-    <None Include="chapter05s02.vert" />
+    <None Include="Data\Shaders\basic.frag" />
+    <None Include="Data\Shaders\basic.vert" />
+    <None Include="Data\Shaders\chapter02s01.frag" />
+    <None Include="Data\Shaders\chapter02s01.vert" />
+    <None Include="Data\Shaders\chapter02s02.vert" />
+    <None Include="Data\Shaders\chapter03s01.frag" />
+    <None Include="Data\Shaders\chapter03s01.geom" />
+    <None Include="Data\Shaders\chapter03s01.tesc" />
+    <None Include="Data\Shaders\chapter03s01.tese" />
+    <None Include="Data\Shaders\chapter03s01.vert" />
+    <None Include="Data\Shaders\chapter03s02.frag" />
+    <None Include="Data\Shaders\chapter03s02.vert" />
+    <None Include="Data\Shaders\chapter03s03.frag" />
+    <None Include="Data\Shaders\chapter05s01.frag" />
+    <None Include="Data\Shaders\chapter05s01.vert" />
+    <None Include="Data\Shaders\chapter05s02.frag" />
+    <None Include="Data\Shaders\chapter05s02.vert" />
+    <None Include="Data\Shaders\light_source.frag" />
+    <None Include="Data\Shaders\light_source.vert" />
+    <None Include="Data\Shaders\yellow.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
