@@ -33,7 +33,7 @@ public:
 	GLuint GetNBO() { return mNBO; }
 	GLuint GetTBO() { return mTBO; }
 
-	GLuint GetVertexCount() { return mVertices.size(); }
+	GLuint GetVertexCount() { return (unsigned)mVertices.size(); }
 private:
 	void Clear();
 	

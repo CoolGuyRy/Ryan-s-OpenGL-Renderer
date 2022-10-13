@@ -1,6 +1,7 @@
 #version 430 core
 
 in vec2 fTex;
+in vec3 fNormal;
 
 out vec4 color;
 

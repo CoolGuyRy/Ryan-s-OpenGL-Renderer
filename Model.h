@@ -28,6 +28,10 @@ public:
 
 	void Draw();
 	void Load(Mesh*, Texture*, Shader*);
+
+	void UpdatePosition(glm::vec3 p) { mPosition = p; }
+	void UpdateRotation(glm::vec3 r) { mRotation = r; }
+	void UpdateScale(glm::vec3 s) { mScale = s; }
 private:
 	glm::mat4 GetModelMatrix();
 

@@ -38,45 +38,6 @@ void WindowSetup(Display& d) {
 	stbi_set_flip_vertically_on_load(true);
 }
 
-struct Entity {
-	Entity() {
-		position = glm::vec3(0.0f);
-		rotation = glm::vec3(0.0f);
-		scale = glm::vec3(1.0f);
-	}
-	Entity(glm::vec3 p) {
-		position = p;
-		rotation = glm::vec3(0.0f);
-		scale = glm::vec3(1.0f);
-	}
-	Entity(glm::vec3 p, glm::vec3 r) {
-		position = p;
-		rotation = r;
-		scale = glm::vec3(1.0f);
-	}
-	Entity(glm::vec3 p, glm::vec3 r, glm::vec3 s) {
-		position = p;
-		rotation = r;
-		scale = s;
-	}
-
-	glm::vec3 position;
-	glm::vec3 rotation;
-	glm::vec3 scale;
-
-	glm::mat4 getWorldMatrix() {
-		glm::mat4 result(1.0f);
-
-		result = glm::translate(result, position);
-		result = glm::rotate(result, rotation.x, glm::vec3(1.0, 0.0, 0.0));
-		result = glm::rotate(result, rotation.y, glm::vec3(0.0, 1.0, 0.0));
-		result = glm::rotate(result, rotation.z, glm::vec3(0.0, 0.0, 1.0));
-		result = glm::scale(result, scale);
-
-		return result;
-	}
-};
-
 int main() {
 	srand((unsigned)time(NULL));
 	//Display gDisplay("OpenGL Renderer");
@@ -84,14 +45,15 @@ int main() {
 
 	WindowSetup(gDisplay);
 
-	Camera gCamera(gDisplay.GetWindow(), glm::vec3(0.0, 0.0, 20.0), glm::vec3(0.0f, 0.0f, -1.0f));
+	Camera gCamera(gDisplay.GetWindow(), glm::vec3(0.0f, 1.5f, 0.0f), glm::vec2(180.0f, 0.0f));
 
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
 
-	Model gModel(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/brick_diffuse.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(0.0, 0.0, -5.0));
-	Model lModel(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/brick_diffuse.png"), new Shader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag"), glm::vec3(10.0, 0.0, -10.0));
-
+	//Model bModel(&gCamera, projection, new Mesh("Data/Models/efa.obj"), new Texture("Data/Textures/efa.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 1.5f, 0.0f), glm::vec3(glm::radians(15.0f), 0.0f, glm::radians(15.0f)), glm::vec3(0.25f));
+	//Model aModel(&gCamera, projection, new Mesh("Data/Models/f22.obj"), new Texture("Data/Textures/f22.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 1.5f, 1.0f), glm::vec3(glm::radians(15.0f), 0.0f, glm::radians(-15.0f)), glm::vec3(0.25f));
+	//Model vikingRoom(&gCamera, projection, new Mesh("Data/Models/viking_room.obj"), new Texture("Data/Textures/viking_room.png"),	 new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(3.0f));
+	Model cube(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/container2.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(1.0f));
 
 	float deltaTime = 0.0f, lastFrame = 0.0f;
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {
@@ -104,8 +66,7 @@ int main() {
 			glfwSetWindowShouldClose(gDisplay.GetWindow(), GL_TRUE);
 		gCamera.Update(deltaTime);
 
-		gModel.Draw();
-		lModel.Draw();
+		cube.Draw();
 		
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
