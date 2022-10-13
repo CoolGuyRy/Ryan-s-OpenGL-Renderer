@@ -88,51 +88,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Shaders\chapter02s01.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter02s01.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter02s02.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s01.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s01.geom">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s01.tesc">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s01.tese">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s01.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s02.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s02.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter03s03.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter05s01.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter05s01.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter05s02.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Data\Shaders\chapter05s02.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
     <None Include="Data\Shaders\basic.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
@@ -146,6 +101,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="Data\Shaders\light_source.vert">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Data\Shaders\shaded.vert">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Data\Shaders\shaded.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

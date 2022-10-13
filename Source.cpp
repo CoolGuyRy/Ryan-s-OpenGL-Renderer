@@ -40,21 +40,26 @@ void WindowSetup(Display& d) {
 
 int main() {
 	srand((unsigned)time(NULL));
-	//Display gDisplay("OpenGL Renderer");
-	Display gDisplay(1280, 960, "OpenGL Renderer");
+	Display gDisplay("OpenGL Renderer");
+	//Display gDisplay(1280, 960, "OpenGL Renderer");
 
 	WindowSetup(gDisplay);
 
-	Camera gCamera(gDisplay.GetWindow(), glm::vec3(0.0f, 1.5f, 0.0f), glm::vec2(180.0f, 0.0f));
+	Camera gCamera(gDisplay.GetWindow(), glm::vec3(-3.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f));
 
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
-
-	//Model bModel(&gCamera, projection, new Mesh("Data/Models/efa.obj"), new Texture("Data/Textures/efa.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 1.5f, 0.0f), glm::vec3(glm::radians(15.0f), 0.0f, glm::radians(15.0f)), glm::vec3(0.25f));
-	//Model aModel(&gCamera, projection, new Mesh("Data/Models/f22.obj"), new Texture("Data/Textures/f22.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 1.5f, 1.0f), glm::vec3(glm::radians(15.0f), 0.0f, glm::radians(-15.0f)), glm::vec3(0.25f));
-	//Model vikingRoom(&gCamera, projection, new Mesh("Data/Models/viking_room.obj"), new Texture("Data/Textures/viking_room.png"),	 new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(3.0f));
-	Model cube(&gCamera, projection, new Mesh("Data/Models/cube.obj"), new Texture("Data/Textures/container2.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"), glm::vec3(-5.0f, 0.0f, 0.0f), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), glm::vec3(1.0f));
-
+	
+	Mesh* CubeMesh = new Mesh("Data/Models/cube.obj");
+	Texture* CubeTexture = new Texture("Data/Textures/container2.png");
+	Mesh* BunnyMesh = new Mesh("Data/Models/Bunny.obj");
+	Texture* BunnyTexture = new Texture("Data/Textures/Bunny.jpg");
+	Shader* CubeShader = new Shader("Data/Shaders/shaded.vert", "Data/Shaders/shaded.frag");
+	Shader* LightShader = new Shader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag");
+	
+	Model cube(&gCamera, projection, BunnyMesh, BunnyTexture, CubeShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, glm::radians(45.0f), 0.0f), glm::vec3(0.25f));
+	Model light(&gCamera, projection, CubeMesh, CubeTexture, LightShader, glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(0.0f), glm::vec3(0.05f));
+	
 	float deltaTime = 0.0f, lastFrame = 0.0f;
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {
 		glfwPollEvents();
@@ -65,8 +70,11 @@ int main() {
 		if (glfwGetKey(gDisplay.GetWindow(), GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(gDisplay.GetWindow(), GL_TRUE);
 		gCamera.Update(deltaTime);
+		
+		cube.UpdateRotation(glm::vec3(0.0f, sinf((float)glfwGetTime() * 0.005f) * 365.0f, 0.0f));
 
 		cube.Draw();
+		light.Draw();
 		
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
