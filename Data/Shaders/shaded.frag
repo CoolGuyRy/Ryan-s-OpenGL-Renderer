@@ -8,7 +8,7 @@ out vec4 outColor;
 
 uniform sampler2D tex;
 
-uniform vec3 lightColor = vec3(1.0, 1.0, 1.0);
+uniform vec3 lightColor = vec3(0.6, 0.9, 0.9);
 uniform vec3 lightPos = vec3(1.2, 1.0, 2.0);
 
 void main(void) {

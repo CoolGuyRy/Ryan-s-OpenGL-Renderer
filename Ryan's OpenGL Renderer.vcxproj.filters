@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Model">
       <UniqueIdentifier>{7792f3df-61a4-461e-8603-1c4cbe3f7cd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ResourceManager">
+      <UniqueIdentifier>{0714120c-3688-4242-afe5-2a996813d3f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -66,6 +69,9 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -85,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Source Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Source Files\ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

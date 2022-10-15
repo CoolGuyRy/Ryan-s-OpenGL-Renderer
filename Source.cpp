@@ -40,8 +40,8 @@ void WindowSetup(Display& d) {
 
 int main() {
 	srand((unsigned)time(NULL));
-	Display gDisplay("OpenGL Renderer");
-	//Display gDisplay(1280, 960, "OpenGL Renderer");
+	//Display gDisplay("OpenGL Renderer");
+	Display gDisplay(1280, 960, "OpenGL Renderer");
 
 	WindowSetup(gDisplay);
 
@@ -50,15 +50,17 @@ int main() {
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
 	
-	Mesh* CubeMesh = new Mesh("Data/Models/cube.obj");
-	Texture* CubeTexture = new Texture("Data/Textures/container2.png");
+	Mesh* CandleMesh = new Mesh("Data/Models/cube.obj");
+	Texture* CandleTexture = new Texture("Data/Textures/container2.png");
+	
 	Mesh* BunnyMesh = new Mesh("Data/Models/Bunny.obj");
 	Texture* BunnyTexture = new Texture("Data/Textures/Bunny.jpg");
+	
 	Shader* CubeShader = new Shader("Data/Shaders/shaded.vert", "Data/Shaders/shaded.frag");
 	Shader* LightShader = new Shader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag");
 	
 	Model cube(&gCamera, projection, BunnyMesh, BunnyTexture, CubeShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, glm::radians(45.0f), 0.0f), glm::vec3(0.25f));
-	Model light(&gCamera, projection, CubeMesh, CubeTexture, LightShader, glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(0.0f), glm::vec3(0.05f));
+	Model light(&gCamera, projection, CandleMesh, CandleTexture, LightShader, glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(0.0f), glm::vec3(0.05f));
 	
 	float deltaTime = 0.0f, lastFrame = 0.0f;
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {

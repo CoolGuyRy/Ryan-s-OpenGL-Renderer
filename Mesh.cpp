@@ -99,13 +99,13 @@ void Mesh::LoadMesh(std::string src) {
 		}
 	}
 
-	std::cout << "Finished loading mesh: " << src << std::endl;
-	std::cout << "Vertices: " << tempVertices.size() << std::endl;
-	std::cout << "Texture Coords: " << tempTexCoords.size() << std::endl;
-	std::cout << "Normals: " << tempNormals.size() << std::endl;
-	std::cout << "Vertex Indices: " << mVertices.size() << std::endl;
-	std::cout << "Texture Indices: " << mTexCoords.size() << std::endl;
-	std::cout << "Normal Indices: " << mNormals.size() << std::endl;
+	//std::cout << "Finished loading mesh: " << src << std::endl;
+	//std::cout << "Vertices: " << tempVertices.size() << std::endl;
+	//std::cout << "Texture Coords: " << tempTexCoords.size() << std::endl;
+	//std::cout << "Normals: " << tempNormals.size() << std::endl;
+	//std::cout << "Vertex Indices: " << mVertices.size() << std::endl;
+	//std::cout << "Texture Indices: " << mTexCoords.size() << std::endl;
+	//std::cout << "Normal Indices: " << mNormals.size() << std::endl;
 	std::cout << "Triangles: " << mVertices.size() / 3 << std::endl;
 }
 
