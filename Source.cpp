@@ -8,6 +8,8 @@
 #include "Camera.h"
 #include "Mesh.h"
 #include "Model.h"
+#include "ResourceManager.h"
+#include "Scene.h"
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	
@@ -50,17 +52,22 @@ int main() {
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
 	
-	Mesh* CandleMesh = new Mesh("Data/Models/cube.obj");
-	Texture* CandleTexture = new Texture("Data/Textures/container2.png");
+	ResourceManager gResourceManager;
+
+	gResourceManager.AddMesh("Cube", new Mesh("Data/Models/cube.obj"));
+	gResourceManager.AddMesh("Bunny", new Mesh("Data/Models/bunny.obj"));
+
+	gResourceManager.AddTexture("Container", new Texture("Data/Textures/container2.png"));
+	gResourceManager.AddTexture("Bunny", new Texture("Data/Textures/bunny.jpg"));
+
+	gResourceManager.AddShader("Shaded", new Shader("Data/Shaders/shaded.vert", "Data/Shaders/shaded.frag"));
+	gResourceManager.AddShader("Light Source", new Shader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag"));
 	
-	Mesh* BunnyMesh = new Mesh("Data/Models/Bunny.obj");
-	Texture* BunnyTexture = new Texture("Data/Textures/Bunny.jpg");
-	
-	Shader* CubeShader = new Shader("Data/Shaders/shaded.vert", "Data/Shaders/shaded.frag");
-	Shader* LightShader = new Shader("Data/Shaders/light_source.vert", "Data/Shaders/light_source.frag");
-	
-	Model cube(&gCamera, projection, BunnyMesh, BunnyTexture, CubeShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, glm::radians(45.0f), 0.0f), glm::vec3(0.25f));
-	Model light(&gCamera, projection, CandleMesh, CandleTexture, LightShader, glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(0.0f), glm::vec3(0.05f));
+	Scene gScene;
+
+	gScene.AddModel(Model(&gCamera, projection, gResourceManager.GetMesh("Bunny"), gResourceManager.GetTexture("Bunny"), gResourceManager.GetShader("Shaded"), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, glm::radians(45.0f), 0.0f), glm::vec3(0.25f)));
+
+	gScene.AddModel(Model(&gCamera, projection, gResourceManager.GetMesh("Cube"), gResourceManager.GetTexture("Container"), gResourceManager.GetShader("Light Source"), glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(0.0f), glm::vec3(0.05f)));
 	
 	float deltaTime = 0.0f, lastFrame = 0.0f;
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {
@@ -72,11 +79,8 @@ int main() {
 		if (glfwGetKey(gDisplay.GetWindow(), GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(gDisplay.GetWindow(), GL_TRUE);
 		gCamera.Update(deltaTime);
-		
-		cube.UpdateRotation(glm::vec3(0.0f, sinf((float)glfwGetTime() * 0.005f) * 365.0f, 0.0f));
 
-		cube.Draw();
-		light.Draw();
+		gScene.Draw();
 		
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;

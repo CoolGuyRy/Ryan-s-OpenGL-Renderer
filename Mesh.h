@@ -23,6 +23,7 @@ class Mesh {
 public:
 	Mesh();
 	Mesh(std::string);
+	~Mesh();
 
 	void LoadMesh(std::string);
 	void Build();

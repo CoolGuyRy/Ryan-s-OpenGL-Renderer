@@ -52,7 +52,13 @@ void Camera::Update(float deltaTime) {
 	double yoffset = -(ypos - mLastMousePos.y) * CAMERA_SENSITIVITY;
 	mLastMousePos = glm::vec2(xpos, ypos);
 
-	mEulerAngles += glm::vec2(xoffset, yoffset);
+	if (glfwGetMouseButton(mWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+		mEulerAngles += glm::vec2(xoffset, yoffset);
+		glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+	else {
+		glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
 
 	if (mEulerAngles.y > 89.0f)
 		mEulerAngles.y = 89.0f;

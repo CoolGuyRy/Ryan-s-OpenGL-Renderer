@@ -40,6 +40,9 @@
     <Filter Include="Source Files\ResourceManager">
       <UniqueIdentifier>{0714120c-3688-4242-afe5-2a996813d3f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scene">
+      <UniqueIdentifier>{ec3f8eb1-d5ba-4c2a-bb25-3a23482bef3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -72,6 +75,9 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Source Files\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Source Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

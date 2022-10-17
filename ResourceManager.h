@@ -23,9 +23,9 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
-	void AddShader(std::string, std::string);
-	void AddTexture(std::string, std::string);
-	void AddMesh(std::string, std::string);
+	void AddShader(std::string, Shader*);
+	void AddTexture(std::string, Texture*);
+	void AddMesh(std::string, Mesh*);
 
 	void RemoveShader(std::string);
 	void RemoveTexture(std::string);

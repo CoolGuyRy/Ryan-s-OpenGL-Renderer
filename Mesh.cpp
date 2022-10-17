@@ -9,6 +9,21 @@ Mesh::Mesh(std::string file) : mVAO(0), mVBO(0), mEBO(0), mNBO(0), mTBO(0) {
 	Build();
 }
 
+Mesh::~Mesh() {
+	Clear();
+	
+	if (glIsBuffer(mVBO))
+		glDeleteBuffers(1, &mVBO);
+	if (glIsBuffer(mEBO))
+		glDeleteBuffers(1, &mEBO);
+	if (glIsBuffer(mNBO))
+		glDeleteBuffers(1, &mNBO);
+	if (glIsBuffer(mTBO))
+		glDeleteBuffers(1, &mTBO);
+	if (glIsVertexArray(mVAO))
+		glDeleteVertexArrays(1, &mVAO);
+}
+
 void Mesh::LoadMesh(std::string src) {
 	Clear();
 	std::ifstream file(src);
