@@ -8,11 +8,20 @@
 const float CAMERA_SPEED = 5.0f;
 const float CAMERA_SENSITIVITY = 0.1f;
 
+/*
+
+	Camera Class:
+
+	- Responsible for updating the view matrix
+	- By default is looking down the positive x-axis
+
+*/
+
 class Camera {
 public:
 	Camera(GLFWwindow*);
 	Camera(GLFWwindow*, glm::vec3);
-	Camera(GLFWwindow*, glm::vec3, glm::vec3);
+	Camera(GLFWwindow*, glm::vec3, glm::vec2);
 	
 	void Update(float);
 	

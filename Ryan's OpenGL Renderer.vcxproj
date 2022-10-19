@@ -104,13 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libaries\stb;$(SolutionDir)Libraries\glm;$(SolutionDir)Libraries\GLAD\include;$(SolutionDir)Libraries\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\assimp\include;$(SolutionDir)Libaries\stb;$(SolutionDir)Libraries\glm;$(SolutionDir)Libraries\GLAD\include;$(SolutionDir)Libraries\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\assimp;C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -121,15 +121,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libaries\stb;$(SolutionDir)Libraries\glm;$(SolutionDir)Libraries\GLAD\include;$(SolutionDir)Libraries\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\assimp\include;$(SolutionDir)Libaries\stb;$(SolutionDir)Libraries\glm;$(SolutionDir)Libraries\GLAD\include;$(SolutionDir)Libraries\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\assimp;C:\Users\Ryno9\Desktop\Ryan%27s OpenGL Renderer\Libraries\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -138,6 +138,8 @@
     <ClCompile Include="Libraries\GLAD\src\glad.c" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -148,29 +150,20 @@
     <ClInclude Include="Display.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shaders\basic.frag" />
     <None Include="Data\Shaders\basic.vert" />
-    <None Include="Data\Shaders\chapter02s01.frag" />
-    <None Include="Data\Shaders\chapter02s01.vert" />
-    <None Include="Data\Shaders\chapter02s02.vert" />
-    <None Include="Data\Shaders\chapter03s01.frag" />
-    <None Include="Data\Shaders\chapter03s01.geom" />
-    <None Include="Data\Shaders\chapter03s01.tesc" />
-    <None Include="Data\Shaders\chapter03s01.tese" />
-    <None Include="Data\Shaders\chapter03s01.vert" />
-    <None Include="Data\Shaders\chapter03s02.frag" />
-    <None Include="Data\Shaders\chapter03s02.vert" />
-    <None Include="Data\Shaders\chapter03s03.frag" />
-    <None Include="Data\Shaders\chapter05s01.frag" />
-    <None Include="Data\Shaders\chapter05s01.vert" />
-    <None Include="Data\Shaders\chapter05s02.frag" />
-    <None Include="Data\Shaders\chapter05s02.vert" />
+    <None Include="Data\Shaders\KayKit.frag" />
+    <None Include="Data\Shaders\KayKit.vert" />
     <None Include="Data\Shaders\light_source.frag" />
     <None Include="Data\Shaders\light_source.vert" />
+    <None Include="Data\Shaders\shaded.frag" />
+    <None Include="Data\Shaders\shaded.vert" />
     <None Include="Data\Shaders\yellow.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

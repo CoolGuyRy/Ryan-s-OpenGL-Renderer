@@ -22,8 +22,6 @@ public:
 	Display(int, int, std::string);
 	~Display();
 
-	void Init();
-
 	GLFWwindow* GetWindow() { return mWindow; }
 	int GetWidth() { return mWidth; }
 	int GetHeight() { return mHeight; }

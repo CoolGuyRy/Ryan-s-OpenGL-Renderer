@@ -10,6 +10,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 /*
 
 	This Mesh class can only load obj files with vertices, normals, texture coordinates, and is indexed. 
@@ -19,29 +23,27 @@
 	
 */
 
+struct Material {
+	glm::vec3 mAmbient;
+	glm::vec3 mDiffuse;
+	glm::vec3 mSpecular;
+	float mShininess;
+};
+
 class Mesh {
 public:
 	Mesh();
-	Mesh(std::string);
+	Mesh(aiMesh*, const aiScene*);
+	~Mesh();
 
-	void LoadMesh(std::string);
-	void Build();
-
-	GLuint GetVAO() { return mVAO; }
-	GLuint GetVBO() { return mVBO; }
-	GLuint GetEBO() { return mEBO; }
-	GLuint GetNBO() { return mNBO; }
-	GLuint GetTBO() { return mTBO; }
-
-	GLuint GetVertexCount() { return mVertices.size(); }
-private:
-	void Clear();
+	void Load(aiMesh*, const aiScene*);
 	
+	unsigned GetIndices() { return mIndices; }
+	Material GetMaterial()  { return mMaterial; }
+	GLuint GetVAO() { return mVAO; }
+private:
+	Material mMaterial;
 	GLuint mVAO, mVBO, mEBO, mNBO, mTBO;
-
-	std::vector<glm::vec3> mVertices;
-	std::vector<glm::vec3> mIndices;
-	std::vector<glm::vec3> mNormals;
-	std::vector<glm::vec2> mTexCoords;
+	unsigned mIndices;
 };
 #endif

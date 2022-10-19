@@ -1,61 +1,75 @@
 #include "Model.h"
 
-Model::Model(Camera* c, glm::mat4 p) : mMesh(nullptr), mTexture(nullptr), mShader(nullptr), mCamera(c), mProjMatrix(p) {
-	mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-	mRotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	mScale = glm::vec3(1.0f, 1.0f, 1.0f);
+Model::Model(Camera* cam, glm::mat4 proj, std::string src, Shader* shade) : mCamera(cam), mProjMatrix(proj), mShader(shade) {
+	mPosition = glm::vec3(0.0f);
+	mRotation = glm::vec3(0.0f);
+	mScale = glm::vec3(1.0f);
 	mModelMatrix = GetModelMatrix();
+
+	Load(src);
+}
+Model::Model(Camera* cam, glm::mat4 proj, std::string src, Shader* shade, glm::vec3 pos) : mCamera(cam), mProjMatrix(proj), mShader(shade), mPosition(pos) {
+	mRotation = glm::vec3(0.0f);
+	mScale = glm::vec3(1.0f);
+	mModelMatrix = GetModelMatrix();
+
+	Load(src);
+}
+Model::Model(Camera* cam, glm::mat4 proj, std::string src, Shader* shade, glm::vec3 pos, glm::vec3 rot) : mCamera(cam), mProjMatrix(proj), mShader(shade), mPosition(pos), mRotation(rot) {
+	mScale = glm::vec3(1.0f);
+	mModelMatrix = GetModelMatrix();
+
+	Load(src);
+}
+Model::Model(Camera* cam, glm::mat4 proj, std::string src, Shader* shade, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale) : mCamera(cam), mProjMatrix(proj), mShader(shade), mPosition(pos), mRotation(rot), mScale(scale) {
+	mModelMatrix = GetModelMatrix();
+
+	Load(src);
 }
 
-Model::Model(Camera* c, glm::mat4 p, Mesh* m, Texture* t, Shader* s) : mCamera(c), mProjMatrix(p), mMesh(m), mTexture(t), mShader(s) {
-	mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-	mRotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	mScale = glm::vec3(1.0f, 1.0f, 1.0f);
-	mModelMatrix = GetModelMatrix();
-}
+void Model::Load(std::string src) {
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(src, aiProcess_Triangulate | aiProcess_FlipUVs);
 
-Model::Model(Camera* c, glm::mat4 p, Mesh* m, Texture* t, Shader* s, glm::vec3 pos) : mCamera(c), mProjMatrix(p), mMesh(m), mTexture(t), mShader(s), mPosition(pos) {
-	mRotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	mScale = glm::vec3(1.0f, 1.0f, 1.0f);
-	mModelMatrix = GetModelMatrix();
-}
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+		std::cout << "Error: " << importer.GetErrorString() << std::endl;
+		return;
+	}
 
-Model::Model(Camera* c, glm::mat4 p, Mesh* m, Texture* t, Shader* s, glm::vec3 pos, glm::vec3 rot) : mCamera(c), mProjMatrix(p), mMesh(m), mTexture(t), mShader(s), mPosition(pos), mRotation(rot) {
-	mScale = glm::vec3(1.0f, 1.0f, 1.0f);
-	mModelMatrix = GetModelMatrix();
+	for (unsigned i = 0; i < scene->mNumMeshes; i++) {
+		aiMesh* mesh = scene->mMeshes[i];
+		mMeshes.push_back(new Mesh(mesh, scene));
+	}
 }
-
-Model::Model(Camera* c, glm::mat4 p, Mesh* m, Texture* t, Shader* s, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale) : mCamera(c), mProjMatrix(p), mMesh(m), mTexture(t), mShader(s), mPosition(pos), mRotation(rot), mScale(scale) {
-	mModelMatrix = GetModelMatrix();
-}
-
 void Model::Draw() {
-	glBindVertexArray(mMesh->GetVAO());
-	glBindBuffer(GL_ARRAY_BUFFER, mMesh->GetVBO());
+	for (unsigned i = 0; i < mMeshes.size(); i++) {
+		glBindVertexArray(mMeshes.at(i)->GetVAO());
+		
+		mShader->Use();
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mTexture->GetTexture());
+		GLuint modelLoc = glGetUniformLocation(mShader->GetProgram(), "model");
+		GLuint viewLoc = glGetUniformLocation(mShader->GetProgram(), "view");
+		GLuint projLoc = glGetUniformLocation(mShader->GetProgram(), "proj");
+		
+		GLuint ambientLoc = glGetUniformLocation(mShader->GetProgram(), "material.ambient");
+		GLuint diffuseLoc = glGetUniformLocation(mShader->GetProgram(), "material.diffuse");
+		GLuint specularLoc = glGetUniformLocation(mShader->GetProgram(), "material.specular");
+		GLuint shininessLoc = glGetUniformLocation(mShader->GetProgram(), "material.shininess");
 
-	GLuint modelLoc = glGetUniformLocation(mShader->GetProgram(), "model");
-	GLuint viewLoc = glGetUniformLocation(mShader->GetProgram(), "view");
-	GLuint projLoc = glGetUniformLocation(mShader->GetProgram(), "proj");
 
-	mShader->Use();
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(GetModelMatrix()));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(mCamera->GetViewMatrix()));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(mProjMatrix));
 
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(GetModelMatrix()));
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(mCamera->GetViewMatrix()));
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(mProjMatrix));
+		glUniform3fv(ambientLoc, 1, glm::value_ptr(mMeshes.at(i)->GetMaterial().mAmbient));
+		glUniform3fv(diffuseLoc, 1, glm::value_ptr(mMeshes.at(i)->GetMaterial().mDiffuse));
+		glUniform3fv(specularLoc, 1, glm::value_ptr(mMeshes.at(i)->GetMaterial().mSpecular));
+		glUniform1f(shininessLoc, mMeshes.at(i)->GetMaterial().mShininess);
+		
+		glDrawElements(GL_TRIANGLES, mMeshes.at(i)->GetIndices(), GL_UNSIGNED_INT, 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, mMesh->GetVertexCount());
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-}
-
-void Model::Load(Mesh* m, Texture* t, Shader* s) {
-	mMesh = m;
-	mTexture = t;
-	mShader = s;
+		glBindVertexArray(0);
+	}
 }
 
 glm::mat4 Model::GetModelMatrix() {

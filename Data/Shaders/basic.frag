@@ -1,12 +1,13 @@
 #version 430 core
 
-in vec2 fTex;
+in vec3 fNormal;
+in vec3 fTex;
 
 out vec4 color;
 
-uniform sampler2D mTex;
-uniform sampler2D hTex;
+uniform sampler2D tex;
 
 void main(void) {
-	color = mix(texture(mTex, fTex), texture(hTex, fTex), 0.2);
+	// color = vec4(1.0, 1.0, 1.0, 1.0);
+	color = texture(tex, fTex.xy);
 }
