@@ -79,6 +79,8 @@ void Shader::Build() {
 		return;
 	}
 
+	glUseProgram(0);
+
 	for (GLuint shader : mShaders)
 		glDeleteShader(shader);
 

@@ -1,179 +1,93 @@
 #include "Mesh.h"
 
-Mesh::Mesh() : mVAO(0), mVBO(0), mEBO(0), mNBO(0), mTBO(0) {
-	
-}
+Mesh::Mesh() : mVAO(0) { }
 
-Mesh::Mesh(std::string file) : mVAO(0), mVBO(0), mEBO(0), mNBO(0), mTBO(0) {
-	LoadMesh(file);
-	Build();
+Mesh::Mesh(std::string fileSrc) {
+	Load(fileSrc);
 }
 
 Mesh::~Mesh() {
-	Clear();
 	
-	if (glIsBuffer(mVBO))
-		glDeleteBuffers(1, &mVBO);
-	if (glIsBuffer(mEBO))
-		glDeleteBuffers(1, &mEBO);
-	if (glIsBuffer(mNBO))
-		glDeleteBuffers(1, &mNBO);
-	if (glIsBuffer(mTBO))
-		glDeleteBuffers(1, &mTBO);
-	if (glIsVertexArray(mVAO))
-		glDeleteVertexArrays(1, &mVAO);
 }
 
-void Mesh::LoadMesh(std::string src) {
-	Clear();
-	std::ifstream file(src);
+void Mesh::Load(std::string fileSrc) {
+	Assimp::Importer mImporter;
+	const aiScene* mScene = mImporter.ReadFile(fileSrc, aiProcess_Triangulate | aiProcess_RemoveRedundantMaterials);
 
-	if (!file.is_open()) {
-		std::cout << "Error opening file: " << src << std::endl;
+	if (!mScene) {
+		std::cout << "Error: " << mImporter.GetErrorString() << std::endl;
 		return;
 	}
 
-	std::vector<glm::vec3> tempVertices;
-	std::vector<glm::vec3> tempNormals;
-	std::vector<glm::vec2> tempTexCoords;
+	std::cout << "Mesh loaded: " << fileSrc << std::endl;
 
-	while (file.good()) {
-		std::string line;
-		std::getline(file, line);
-
-		if (line.substr(0, 2) == "v ") {
-			glm::vec3 tempVec{};
-			int matches = sscanf_s(line.c_str(), "v %f %f %f\n", &tempVec.x, &tempVec.y, &tempVec.z);
-			tempVertices.push_back(tempVec);
-			continue;
-		}
-		if (line.substr(0, 2) == "vt") {
-			glm::vec2 tempVec{};
-			int matches = sscanf_s(line.c_str(), "vt %f %f\n", &tempVec.x, &tempVec.y);
-			tempTexCoords.push_back(tempVec);
-			continue;
-		}
-		if (line.substr(0, 2) == "vn") {
-			glm::vec3 tempVec{};
-			int matches = sscanf_s(line.c_str(), "vn %f %f %f\n", &tempVec.x, &tempVec.y, &tempVec.z);
-			tempNormals.push_back(tempVec);
-			continue;
-		}
-		if (line.substr(0, 2) == "f ") {
-			int matches = -1;
-
-			size_t v1 = 0, v2 = 0, v3 = 0;
-			size_t vt1 = 0, vt2 = 0, vt3 = 0;
-			size_t vn1 = 0, vn2 = 0, vn3 = 0;
-
-			matches = sscanf_s(line.c_str(), "f %zd/%zd/%zd %zd/%zd/%zd %zd/%zd/%zd\n", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
-			if (matches == 9) { // Format is: f %zd/%zd/%zd %zd/%zd/%zd %zd/%zd/%zd
-				mVertices.push_back(tempVertices.at(v1 - 1));
-				mVertices.push_back(tempVertices.at(v2 - 1));
-				mVertices.push_back(tempVertices.at(v3 - 1));
-
-				mTexCoords.push_back(tempTexCoords.at(vt1 - 1));
-				mTexCoords.push_back(tempTexCoords.at(vt2 - 1));
-				mTexCoords.push_back(tempTexCoords.at(vt3 - 1));
-
-				mNormals.push_back(tempNormals.at(vn1 - 1));
-				mNormals.push_back(tempNormals.at(vn2 - 1));
-				mNormals.push_back(tempNormals.at(vn3 - 1));
-			}
-
-			matches = sscanf_s(line.c_str(), "f %zd//%zd %zd//%zd %zd//%zd\n", &v1, &vn1, &v2, &vn2, &v3, &vn3);
-			if (matches == 6) { // Format is: f %zd//%zd %zd//%zd %zd//%zd
-				mVertices.push_back(tempVertices.at(v1 - 1));
-				mVertices.push_back(tempVertices.at(v2 - 1));
-				mVertices.push_back(tempVertices.at(v3 - 1));
-
-				mNormals.push_back(tempNormals.at(vn1 - 1));
-				mNormals.push_back(tempNormals.at(vn2 - 1));
-				mNormals.push_back(tempNormals.at(vn3 - 1));
-			}
-
-			matches = sscanf_s(line.c_str(), "f %zd/%zd %zd/%zd %zd/%zd\n", &v1, &vt1, &v2, &vt2, &v3, &vt3);
-			if (matches == 6) { // Format is: f %zd/%zd %zd/%zd %zd/%zd
-				mVertices.push_back(tempVertices.at(v1 - 1));
-				mVertices.push_back(tempVertices.at(v2 - 1));
-				mVertices.push_back(tempVertices.at(v3 - 1));
-
-				mTexCoords.push_back(tempTexCoords.at(vt1 - 1));
-				mTexCoords.push_back(tempTexCoords.at(vt2 - 1));
-				mTexCoords.push_back(tempTexCoords.at(vt3 - 1));
-			}
-
-			matches = sscanf_s(line.c_str(), "f %zd %zd %zd\n", &v1, &v2, &v3);
-			if (matches == 3) { // Format is: f %zd %zd %zd
-				mVertices.push_back(tempVertices.at(v1 - 1));
-				mVertices.push_back(tempVertices.at(v2 - 1));
-				mVertices.push_back(tempVertices.at(v3 - 1));
-			}
-
-			continue;
-		}
-	}
-
-	//std::cout << "Finished loading mesh: " << src << std::endl;
-	//std::cout << "Vertices: " << tempVertices.size() << std::endl;
-	//std::cout << "Texture Coords: " << tempTexCoords.size() << std::endl;
-	//std::cout << "Normals: " << tempNormals.size() << std::endl;
-	//std::cout << "Vertex Indices: " << mVertices.size() << std::endl;
-	//std::cout << "Texture Indices: " << mTexCoords.size() << std::endl;
-	//std::cout << "Normal Indices: " << mNormals.size() << std::endl;
-	std::cout << "Triangles: " << mVertices.size() / 3 << std::endl;
-}
-
-void Mesh::Build() {
-	if (mVertices.size() == 0) {
-		std::cout << "Error building model: No vertices to build model from." << std::endl;
-		return;
-	}
-
-	if (glIsBuffer(mVBO))
-		glDeleteBuffers(1, &mVBO);
-	if (glIsBuffer(mEBO))
-		glDeleteBuffers(1, &mEBO);
-	if (glIsBuffer(mNBO))
-		glDeleteBuffers(1, &mNBO);
-	if (glIsBuffer(mTBO))
-		glDeleteBuffers(1, &mTBO);
-	if (glIsVertexArray(mVAO))
-		glDeleteVertexArrays(1, &mVAO);
+	Cleanup();
 
 	glGenVertexArrays(1, &mVAO);
 	glBindVertexArray(mVAO);
 
-	if (mVertices.size() != 0) {
-		glGenBuffers(1, &mVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-		glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(glm::vec3), &mVertices[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-		glEnableVertexAttribArray(0);
+	for (unsigned i = 0; i < mScene->mNumMeshes; i++) {
+		for (unsigned j = 0; j < mScene->mMeshes[i]->mNumVertices; j++) {
+			mVertices.push_back(mScene->mMeshes[i]->mVertices[j]);
+			mNormals.push_back(mScene->mMeshes[i]->mNormals[j]);
+			mTexCoords.push_back(mScene->mMeshes[i]->mTextureCoords[0][j]);
+		}
 	}
 
-	if (mTexCoords.size() != 0) {
-		glGenBuffers(1, &mTBO);
-		glBindBuffer(GL_ARRAY_BUFFER, mTBO);
-		glBufferData(GL_ARRAY_BUFFER, mTexCoords.size() * sizeof(glm::vec2), &mTexCoords[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-		glEnableVertexAttribArray(1);
+	for (unsigned i = 0; i < mScene->mMeshes[0]->mNumFaces; i++) {
+		for (unsigned j = 0; j < mScene->mMeshes[0]->mFaces[i].mNumIndices; j++) {
+			mIndices.push_back(mScene->mMeshes[0]->mFaces[i].mIndices[j]);
+		}
 	}
 
-	if (mNormals.size() != 0) {
-		glGenBuffers(1, &mNBO);
-		glBindBuffer(GL_ARRAY_BUFFER, mNBO);
-		glBufferData(GL_ARRAY_BUFFER, mNormals.size() * sizeof(glm::vec3), &mNormals[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-		glEnableVertexAttribArray(2);
-	}
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(aiVector3D), &mVertices[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+
+	GLuint nbo;
+	glGenBuffers(1, &nbo);
+	glBindBuffer(GL_ARRAY_BUFFER, nbo);
+	glBufferData(GL_ARRAY_BUFFER, mNormals.size() * sizeof(aiVector3D), &mNormals[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);
+
+	GLuint tbo;
+	glGenBuffers(1, &tbo);
+	glBindBuffer(GL_ARRAY_BUFFER, tbo);
+	glBufferData(GL_ARRAY_BUFFER, mTexCoords.size() * sizeof(aiVector3D), &mTexCoords[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(2);
+
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(unsigned int), &mIndices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 }
 
-void Mesh::Clear() {
-	mVertices.clear();
-	mIndices.clear();
-	mNormals.clear();
-	mTexCoords.clear();
+void Mesh::Cleanup() {
+	for (GLuint buffer : mVBO) {
+		if (glIsBuffer(buffer))
+			glDeleteBuffers(1, &buffer);
+	}
+	for (GLuint buffer : mEBO) {
+		if (glIsBuffer(buffer))
+			glDeleteBuffers(1, &buffer);
+	}
+	mEBO.clear();
+	for (GLuint buffer : mNBO) {
+		if (glIsBuffer(buffer))
+			glDeleteBuffers(1, &buffer);
+	}
+	mNBO.clear();
+	for (GLuint buffer : mTBO) {
+		if (glIsBuffer(buffer))
+			glDeleteBuffers(1, &buffer);
+	}
+	mTBO.clear();
+	glDeleteVertexArrays(1, &mVAO);
 }

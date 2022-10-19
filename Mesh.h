@@ -10,6 +10,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 /*
 
 	This Mesh class can only load obj files with vertices, normals, texture coordinates, and is indexed. 
@@ -25,24 +29,21 @@ public:
 	Mesh(std::string);
 	~Mesh();
 
-	void LoadMesh(std::string);
-	void Build();
+	void Load(std::string);
+
+	unsigned GetIndicesCount() { return (unsigned)mIndices.size(); }
 
 	GLuint GetVAO() { return mVAO; }
-	GLuint GetVBO() { return mVBO; }
-	GLuint GetEBO() { return mEBO; }
-	GLuint GetNBO() { return mNBO; }
-	GLuint GetTBO() { return mTBO; }
-
-	GLuint GetVertexCount() { return (unsigned)mVertices.size(); }
+	GLuint GetVBO(int i) { return mVBO.at(i); }
+	GLuint GetEBO(int i) { return mEBO.at(i); }
+	GLuint GetNBO(int i) { return mNBO.at(i); }
+	GLuint GetTBO(int i) { return mTBO.at(i); }
 private:
-	void Clear();
+	void Cleanup();
 	
-	GLuint mVAO, mVBO, mEBO, mNBO, mTBO;
-
-	std::vector<glm::vec3> mVertices;
-	std::vector<glm::vec3> mIndices;
-	std::vector<glm::vec3> mNormals;
-	std::vector<glm::vec2> mTexCoords;
+	GLuint mVAO;
+	std::vector<GLuint> mVBO, mEBO, mNBO, mTBO;
+	std::vector<aiVector3D> mVertices, mNormals, mTexCoords;
+	std::vector<unsigned int> mIndices;
 };
 #endif

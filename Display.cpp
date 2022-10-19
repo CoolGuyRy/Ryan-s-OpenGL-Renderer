@@ -88,8 +88,8 @@ Display::Display(int width, int height, std::string title) : mWindow(0), mWidth(
 
 	glfwSwapInterval(1);
 
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
+	//glEnable(GL_CULL_FACE);
+	//glFrontFace(GL_CCW);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);

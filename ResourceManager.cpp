@@ -1,8 +1,14 @@
 #include "ResourceManager.h"
 
 ResourceManager::ResourceManager() {}
+
 ResourceManager::~ResourceManager() {
-	// Todo: Delete all resources
+	for (auto shader : mShaders)
+		delete shader.second;
+	for (auto texture : mTextures)
+		delete texture.second;
+	for (auto mesh : mMeshes)
+		delete mesh.second;
 }
 
 void ResourceManager::AddShader(std::string name, Shader* shader) {

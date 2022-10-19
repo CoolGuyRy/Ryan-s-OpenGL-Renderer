@@ -31,7 +31,6 @@ Model::Model(Camera* c, glm::mat4 p, Mesh* m, Texture* t, Shader* s, glm::vec3 p
 
 void Model::Draw() {
 	glBindVertexArray(mMesh->GetVAO());
-	//glBindBuffer(GL_ARRAY_BUFFER, mMesh->GetVBO());
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mTexture->GetTexture());
@@ -46,9 +45,8 @@ void Model::Draw() {
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(mCamera->GetViewMatrix()));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(mProjMatrix));
 
-	glDrawArrays(GL_TRIANGLES, 0, mMesh->GetVertexCount());
+	glDrawElements(GL_TRIANGLES, mMesh->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
