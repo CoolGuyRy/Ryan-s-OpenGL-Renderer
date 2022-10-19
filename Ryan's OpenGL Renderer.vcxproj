@@ -158,6 +158,8 @@
   <ItemGroup>
     <None Include="Data\Shaders\basic.frag" />
     <None Include="Data\Shaders\basic.vert" />
+    <None Include="Data\Shaders\KayKit.frag" />
+    <None Include="Data\Shaders\KayKit.vert" />
     <None Include="Data\Shaders\light_source.frag" />
     <None Include="Data\Shaders\light_source.vert" />
     <None Include="Data\Shaders\shaded.frag" />

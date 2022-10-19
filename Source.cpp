@@ -52,9 +52,7 @@ int main() {
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
 
-	ResourceManager gResourceManager;
-
-	Model gModel(&gCamera, projection, new Mesh("Data/Models/Dungeon/obj/arrow.obj"), new Texture("Data/Textures/container2.png"), new Shader("Data/Shaders/basic.vert", "Data/Shaders/basic.frag"));
+	Model gModel(&gCamera, projection, "Data/Models/Dungeon/fbx/weaponRack.fbx", new Shader("Data/Shaders/KayKit.vert", "Data/Shaders/KayKit.frag"));
 
 	float deltaTime = 0.0f, lastFrame = 0.0f;
 	while (!glfwWindowShouldClose(gDisplay.GetWindow())) {

@@ -23,27 +23,27 @@
 	
 */
 
+struct Material {
+	glm::vec3 mAmbient;
+	glm::vec3 mDiffuse;
+	glm::vec3 mSpecular;
+	float mShininess;
+};
+
 class Mesh {
 public:
 	Mesh();
-	Mesh(std::string);
+	Mesh(aiMesh*, const aiScene*);
 	~Mesh();
 
-	void Load(std::string);
-
-	unsigned GetIndicesCount() { return (unsigned)mIndices.size(); }
-
-	GLuint GetVAO() { return mVAO; }
-	GLuint GetVBO(int i) { return mVBO.at(i); }
-	GLuint GetEBO(int i) { return mEBO.at(i); }
-	GLuint GetNBO(int i) { return mNBO.at(i); }
-	GLuint GetTBO(int i) { return mTBO.at(i); }
-private:
-	void Cleanup();
+	void Load(aiMesh*, const aiScene*);
 	
-	GLuint mVAO;
-	std::vector<GLuint> mVBO, mEBO, mNBO, mTBO;
-	std::vector<aiVector3D> mVertices, mNormals, mTexCoords;
-	std::vector<unsigned int> mIndices;
+	unsigned GetIndices() { return mIndices; }
+	Material GetMaterial()  { return mMaterial; }
+	GLuint GetVAO() { return mVAO; }
+private:
+	Material mMaterial;
+	GLuint mVAO, mVBO, mEBO, mNBO, mTBO;
+	unsigned mIndices;
 };
 #endif

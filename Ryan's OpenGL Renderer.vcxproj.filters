@@ -127,5 +127,11 @@
     <None Include="Data\Shaders\shaded.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="Data\Shaders\KayKit.vert">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Data\Shaders\KayKit.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

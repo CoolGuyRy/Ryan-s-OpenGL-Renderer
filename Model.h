@@ -20,14 +20,13 @@
 
 class Model {
 public:
-	Model(Camera*, glm::mat4);
-	Model(Camera*, glm::mat4, Mesh*, Texture*, Shader*);
-	Model(Camera*, glm::mat4, Mesh*, Texture*, Shader*, glm::vec3);
-	Model(Camera*, glm::mat4, Mesh*, Texture*, Shader*, glm::vec3, glm::vec3);
-	Model(Camera*, glm::mat4, Mesh*, Texture*, Shader*, glm::vec3, glm::vec3, glm::vec3);
-
+	Model(Camera*, glm::mat4, std::string, Shader*);
+	Model(Camera*, glm::mat4, std::string, Shader*, glm::vec3);
+	Model(Camera*, glm::mat4, std::string, Shader*, glm::vec3, glm::vec3);
+	Model(Camera*, glm::mat4, std::string, Shader*, glm::vec3, glm::vec3, glm::vec3);
+	
+	void Load(std::string);
 	void Draw();
-	void Load(Mesh*, Texture*, Shader*);
 
 	void UpdatePosition(glm::vec3 p) { mPosition = p; }
 	void UpdateRotation(glm::vec3 r) { mRotation = r; }
@@ -39,13 +38,12 @@ private:
 	glm::mat4 mModelMatrix;
 	glm::mat4 mProjMatrix;
 
+	Shader* mShader;
+	std::vector<Mesh*> mMeshes;
+
 	glm::vec3 mPosition;
 	glm::vec3 mRotation;
 	glm::vec3 mScale;
-	
-	Mesh* mMesh;
-	Texture* mTexture;
-	Shader* mShader;
 };
 
 #endif
