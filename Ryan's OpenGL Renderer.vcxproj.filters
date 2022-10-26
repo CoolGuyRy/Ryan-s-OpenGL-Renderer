@@ -43,6 +43,9 @@
     <Filter Include="Source Files\Scene">
       <UniqueIdentifier>{ec3f8eb1-d5ba-4c2a-bb25-3a23482bef3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Light">
+      <UniqueIdentifier>{149e4117-e93b-4e0c-93bd-eb3478e2fde2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -78,6 +81,9 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -103,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Source Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Source Files\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

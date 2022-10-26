@@ -26,6 +26,7 @@ public:
 	void Update(float);
 	
 	glm::mat4 GetViewMatrix() { return glm::lookAt(mCameraPos, mCameraPos + mCameraFront, mCameraUp); }
+	glm::vec3 GetCameraPos() { return mCameraPos; }
 private:
 	float mCameraSpeed;
 
@@ -42,5 +43,4 @@ private:
 
 	GLFWwindow* mWindow;
 };
-
 #endif

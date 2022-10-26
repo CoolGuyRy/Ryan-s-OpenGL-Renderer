@@ -22,5 +22,4 @@ private:
 	GLuint mProgram;
 	std::vector<GLuint> mShaders;
 };
-
 #endif

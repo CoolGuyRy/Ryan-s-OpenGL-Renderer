@@ -11,6 +11,7 @@
 #include "Texture.h"
 #include "Mesh.h"
 #include "Model.h"
+#include "Light.h"
 
 class Scene {
 public:
@@ -21,6 +22,6 @@ public:
 	void Draw();
 private:
 	std::vector<Model> mModels;
+	std::vector<Light> mLights;
 };
-
 #endif

@@ -25,7 +25,7 @@ void Mesh::Load(aiMesh* m, const aiScene* s) {
 
 	aiString matName; aiColor3D ambient, diffuse, specular;
 	
-	s->mMaterials[m->mMaterialIndex]->Get(AI_MATKEY_NAME, matName);
+	s->mMaterials[m->mMaterialIndex]->Get(AI_MATKEY_NAME, mMaterial.mName);
 	s->mMaterials[m->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
 	s->mMaterials[m->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
 	s->mMaterials[m->mMaterialIndex]->Get(AI_MATKEY_COLOR_SPECULAR, specular);

@@ -24,6 +24,7 @@
 */
 
 struct Material {
+	aiString mName;
 	glm::vec3 mAmbient;
 	glm::vec3 mDiffuse;
 	glm::vec3 mSpecular;

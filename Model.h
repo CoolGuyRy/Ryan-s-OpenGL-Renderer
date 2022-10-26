@@ -45,5 +45,4 @@ private:
 	glm::vec3 mRotation;
 	glm::vec3 mScale;
 };
-
 #endif

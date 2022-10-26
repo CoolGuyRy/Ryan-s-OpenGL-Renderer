@@ -39,5 +39,4 @@ private:
 	std::map<std::string, Mesh*> mMeshes;
 	std::map<std::string, Texture*> mTextures;
 };
-
 #endif

@@ -3,11 +3,11 @@
 ResourceManager::ResourceManager() {}
 
 ResourceManager::~ResourceManager() {
-	for (auto shader : mShaders)
+	for (auto& shader : mShaders)
 		delete shader.second;
-	for (auto texture : mTextures)
+	for (auto& texture : mTextures)
 		delete texture.second;
-	for (auto mesh : mMeshes)
+	for (auto& mesh : mMeshes)
 		delete mesh.second;
 }
 
