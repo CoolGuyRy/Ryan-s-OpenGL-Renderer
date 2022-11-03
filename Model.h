@@ -9,14 +9,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Mesh.h"
-
-/*
-
-	Model Class:
-
-	- Not responsible for resource deallocation for Mesh, Texture, and Shader
-
-*/
+#include "Light.h"
 
 class Model {
 public:

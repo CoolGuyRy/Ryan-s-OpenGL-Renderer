@@ -16,27 +16,58 @@ Light::Light(glm::vec3 a, glm::vec3 d, glm::vec3 s) {
 	SetSpecular(s);
 }
 
-DirectionalLight::DirectionalLight() {
+DirectionalLight::DirectionalLight() : Light() {
 	SetDirection(glm::vec3(0.0));
-	SetAmbient(glm::vec3(1.0f));
-	SetDiffuse(glm::vec3(1.0f));
-	SetSpecular(glm::vec3(1.0f));
 }
-DirectionalLight::DirectionalLight(glm::vec3 dir) {
+DirectionalLight::DirectionalLight(glm::vec3 dir) : Light() {
 	SetDirection(dir);
-	SetAmbient(glm::vec3(1.0f));
-	SetDiffuse(glm::vec3(1.0f));
-	SetSpecular(glm::vec3(1.0f));
 }
-DirectionalLight::DirectionalLight(glm::vec3 dir, glm::vec3 c) {
+DirectionalLight::DirectionalLight(glm::vec3 dir, glm::vec3 c) : Light(c) {
 	SetDirection(dir);
-	SetAmbient(c);
-	SetDiffuse(c);
-	SetSpecular(c);
 }
-DirectionalLight::DirectionalLight(glm::vec3 dir, glm::vec3 a, glm::vec3 d, glm::vec3 s) {
+DirectionalLight::DirectionalLight(glm::vec3 dir, glm::vec3 a, glm::vec3 d, glm::vec3 s) : Light(a, d, s) {
 	SetDirection(dir);
-	SetAmbient(a);
-	SetDiffuse(d);
-	SetSpecular(s);
+}
+
+PointLight::PointLight() : Light() {
+	SetPosition(glm::vec3(0.0));
+
+	mConstant = 1.0f;
+	mLinear = 0.09f;
+	mQuadratic = 0.032f;
+}
+PointLight::PointLight(glm::vec3 p) : Light() {
+	SetPosition(p);
+
+	mConstant = 1.0f;
+	mLinear = 0.09f;
+	mQuadratic = 0.032f;
+}
+PointLight::PointLight(glm::vec3 p, glm::vec3 c) : Light(c) {
+	SetPosition(p);
+
+	mConstant = 1.0f;
+	mLinear = 0.09f;
+	mQuadratic = 0.032f;
+}
+PointLight::PointLight(glm::vec3 p, glm::vec3 c, glm::vec3 f) : Light(c) {
+	SetPosition(p);
+
+	mConstant = f.x;
+	mLinear = f.y;
+	mQuadratic = f.z;
+}
+PointLight::PointLight(glm::vec3 p, glm::vec3 a, glm::vec3 d, glm::vec3 s) : Light(a, d, s) {
+	SetPosition(p);
+	
+	mConstant = 1.0f;
+	mLinear = 0.09f;
+	mQuadratic = 0.032f;
+}
+PointLight::PointLight(glm::vec3 p, glm::vec3 a, glm::vec3 d, glm::vec3 s, glm::vec3 f) : Light(a, d, s) {
+	SetPosition(p);
+
+	mConstant = f.x;
+	mLinear = f.y;
+	mQuadratic = f.z;
 }

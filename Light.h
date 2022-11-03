@@ -6,7 +6,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 enum LightType {
-	DEFAULT,
 	DIRECTION,
 	POINT,
 	SPOTLIGHT
@@ -26,7 +25,7 @@ public:
 	glm::vec3 GetDiffuse() { return mDiffuse; }
 	glm::vec3 GetSpecular() { return mSpecular; }
 
-	virtual LightType GetType() { return DEFAULT; }
+	virtual LightType GetType() = 0;
 protected:
 	glm::vec3 mAmbient;
 	glm::vec3 mDiffuse;
@@ -51,8 +50,23 @@ protected:
 
 class PointLight : public Light {
 public:
+	PointLight();
+	PointLight(glm::vec3);
+	PointLight(glm::vec3, glm::vec3);
+	PointLight(glm::vec3, glm::vec3, glm::vec3);
+	PointLight(glm::vec3, glm::vec3, glm::vec3, glm::vec3);
+	PointLight(glm::vec3, glm::vec3, glm::vec3, glm::vec3, glm::vec3);
 
-private:
+	void SetPosition(glm::vec3 p) { mPosition = p; }
 
+	glm::vec3 GetPosition() { return mPosition; }
+
+	LightType GetType() { return POINT; }
+protected:
+	glm::vec3 mPosition;
+	
+	float mConstant;
+	float mLinear;
+	float mQuadratic;
 };
 #endif

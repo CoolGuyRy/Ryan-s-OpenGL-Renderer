@@ -17,11 +17,12 @@ class Scene {
 public:
 	Scene();
 
-	void AddModel(Model);
+	void AddModel(Model*);
+	void AddLight(Light*);
 
 	void Draw();
 private:
-	std::vector<Model> mModels;
-	std::vector<Light> mLights;
+	std::vector<std::pair<std::string, Model*>> mModels;
+	std::vector<std::pair<std::string, Light*>> mLights;
 };
 #endif

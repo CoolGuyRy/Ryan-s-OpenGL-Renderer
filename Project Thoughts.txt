@@ -1,0 +1,40 @@
+So as I work on this project. I find myself thinking of solutions and immediately forgetting them to work on something
+else in the project. So this text file will server as a sort of diary to log my thoughts on the development process here.
+
+Current problems with the project:
+
+- I don't exactly know the best approach to implementing a lighting system for this project. I am thinking of
+  building a sort of scene class that contains all the elements related to drawing a 3D scene. (As the name would suggest).
+
+  - Scene Class Specification:
+	- Contains a list of Objects
+		- Objects will hold the meshes
+		- Objects will hold the shaders
+	- Contains a list of lights
+	- Contains a camera
+	
+	* I think passing the lights as a parameter to the Objects is the only way I can think of implementing this.
+
+	
+Current Dependencies to be aware of:
+	- Model Class:
+		- Model depends on the Camera Class to grab the camera matrix
+		- Model depends on the Shader Class to grab the shader program
+		- Model depends on the Mesh Class to grab the vertex array object
+		- Model depends on the Projection Matrix provided by the Display Class
+	- Mesh Class:
+		- Mesh depends sort of on the Model class to provide the aiMesh and aiScene objects
+	- Camera Class:
+		- Depends on GLFWwindow which can be obtained through the Display Class
+	- Light Class:
+		- No dependencies
+	- Texture Class:
+		- No dependencies
+	- Shader Class:
+		- No dependencies
+	- Display Class:
+		- No dependencies
+	- Scene Class:
+		- No dependencies
+	- Resource Manager Class:
+		- No dependencies

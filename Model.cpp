@@ -29,7 +29,7 @@ Model::Model(Camera* cam, glm::mat4 proj, std::string src, Shader* shade, glm::v
 
 void Model::Load(std::string src) {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(src, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_PreTransformVertices);
+	const aiScene* scene = importer.ReadFile(src, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_PreTransformVertices | aiProcess_FindDegenerates);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		std::cout << "Error: " << importer.GetErrorString() << std::endl;
@@ -56,10 +56,11 @@ void Model::Draw() {
 		GLuint specularLoc = glGetUniformLocation(mShader->GetProgram(), "material.specular");
 		GLuint shininessLoc = glGetUniformLocation(mShader->GetProgram(), "material.shininess");
 
-		GLuint dLightDirLoc = glGetUniformLocation(mShader->GetProgram(), "dLight.direction");
-		GLuint dLightAmbientLoc = glGetUniformLocation(mShader->GetProgram(), "dLight.ambient");
-		GLuint dLightDiffuseLoc = glGetUniformLocation(mShader->GetProgram(), "dLight.diffuse");
-		GLuint dLightSpecularLoc = glGetUniformLocation(mShader->GetProgram(), "dLight.specular");
+		GLuint dLightDirLoc = glGetUniformLocation(mShader->GetProgram(), "dLight[0].direction");
+		GLuint dLightAmbientLoc = glGetUniformLocation(mShader->GetProgram(), "dLight[0].ambient");
+		GLuint dLightDiffuseLoc = glGetUniformLocation(mShader->GetProgram(), "dLight[0].diffuse");
+		GLuint dLightSpecularLoc = glGetUniformLocation(mShader->GetProgram(), "dLight[0].specular");
+		GLuint dLightCountLoc = glGetUniformLocation(mShader->GetProgram(), "numDLights");
 
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(GetModelMatrix()));
@@ -71,10 +72,11 @@ void Model::Draw() {
 		glUniform3fv(specularLoc, 1, glm::value_ptr(mMeshes.at(i)->GetMaterial().mSpecular));
 		glUniform1f(shininessLoc, mMeshes.at(i)->GetMaterial().mShininess);
 
-		glUniform3fv(dLightDirLoc, 1, glm::value_ptr(mCamera->GetCameraPos()));
-		glUniform3fv(dLightAmbientLoc, 1, glm::value_ptr(glm::vec3(1.0f)));
-		glUniform3fv(dLightDiffuseLoc, 1, glm::value_ptr(glm::vec3(1.0f)));
-		glUniform3fv(dLightSpecularLoc, 1, glm::value_ptr(glm::vec3(1.0f)));
+		glUniform3fv(dLightDirLoc, 1, glm::value_ptr(-mCamera->GetCameraDir()));
+		glUniform3fv(dLightAmbientLoc, 1, glm::value_ptr(glm::vec3(0.6f)));
+		glUniform3fv(dLightDiffuseLoc, 1, glm::value_ptr(glm::vec3(0.6f)));
+		glUniform3fv(dLightSpecularLoc, 1, glm::value_ptr(glm::vec3(0.6f)));
+		glUniform1ui(dLightCountLoc, 1);
 		
 		glDrawElements(GL_TRIANGLES, mMeshes.at(i)->GetIndices(), GL_UNSIGNED_INT, 0);
 
