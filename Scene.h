@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -13,16 +14,19 @@
 #include "Model.h"
 #include "Light.h"
 
+const unsigned MAX_LIGHTS = 5;
+
 class Scene {
 public:
 	Scene();
 
 	void AddModel(Model*);
-	void AddLight(Light*);
+	void AddDirectionalLight(Light*);
+	void AddPointLight(Light*);
 
 	void Draw();
 private:
-	std::vector<std::pair<std::string, Model*>> mModels;
-	std::vector<std::pair<std::string, Light*>> mLights;
+	std::vector<Model*> mModels;
+	std::vector<Light*> mDirectionalLights;
 };
 #endif

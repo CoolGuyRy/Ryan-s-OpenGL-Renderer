@@ -72,10 +72,10 @@ void Model::Draw() {
 		glUniform3fv(specularLoc, 1, glm::value_ptr(mMeshes.at(i)->GetMaterial().mSpecular));
 		glUniform1f(shininessLoc, mMeshes.at(i)->GetMaterial().mShininess);
 
-		glUniform3fv(dLightDirLoc, 1, glm::value_ptr(-mCamera->GetCameraDir()));
-		glUniform3fv(dLightAmbientLoc, 1, glm::value_ptr(glm::vec3(0.6f)));
-		glUniform3fv(dLightDiffuseLoc, 1, glm::value_ptr(glm::vec3(0.6f)));
-		glUniform3fv(dLightSpecularLoc, 1, glm::value_ptr(glm::vec3(0.6f)));
+		glUniform3fv(dLightDirLoc, 1, glm::value_ptr(glm::vec3(sinf(glfwGetTime() * 0.5f), 0.3, 0.3)));
+		glUniform3fv(dLightAmbientLoc, 1, glm::value_ptr(glm::vec3(1.0f)));
+		glUniform3fv(dLightDiffuseLoc, 1, glm::value_ptr(glm::vec3(1.0f)));
+		glUniform3fv(dLightSpecularLoc, 1, glm::value_ptr(glm::vec3(1.0f)));
 		glUniform1ui(dLightCountLoc, 1);
 		
 		glDrawElements(GL_TRIANGLES, mMeshes.at(i)->GetIndices(), GL_UNSIGNED_INT, 0);
