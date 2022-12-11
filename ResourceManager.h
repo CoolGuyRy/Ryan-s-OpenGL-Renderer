@@ -10,6 +10,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Mesh.h"
+#include "Model.h"
 
 /*
 	
@@ -25,18 +26,18 @@ public:
 
 	void AddShader(std::string, Shader*);
 	void AddTexture(std::string, Texture*);
-	void AddMesh(std::string, Mesh*);
+	void AddModel(std::string, Model*);
 
 	void RemoveShader(std::string);
 	void RemoveTexture(std::string);
-	void RemoveMesh(std::string);
+	void RemoveModel(std::string);
 	
 	Shader* GetShader(std::string);
 	Texture* GetTexture(std::string);
-	Mesh* GetMesh(std::string);
+	Model* GetModel(std::string);
 private:
 	std::map<std::string, Shader*> mShaders;
-	std::map<std::string, Mesh*> mMeshes;
 	std::map<std::string, Texture*> mTextures;
+	std::map<std::string, Model*> mModels;
 };
 #endif

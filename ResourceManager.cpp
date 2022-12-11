@@ -7,7 +7,7 @@ ResourceManager::~ResourceManager() {
 		delete shader.second;
 	for (auto& texture : mTextures)
 		delete texture.second;
-	for (auto& mesh : mMeshes)
+	for (auto& mesh : mModels)
 		delete mesh.second;
 }
 
@@ -29,13 +29,13 @@ void ResourceManager::AddTexture(std::string name, Texture* texture) {
 		mTextures[name] = texture;
 	}
 }
-void ResourceManager::AddMesh(std::string name, Mesh* mesh) {
-	if (mMeshes.find(name) != mMeshes.end()) {
+void ResourceManager::AddModel(std::string name, Model* model) {
+	if (mModels.find(name) != mModels.end()) {
 		std::cout << "Mesh already exists: " << name << std::endl;
 		return;
 	}
 	else {
-		mMeshes[name] = mesh;
+		mModels[name] = model;
 	}
 }
 
@@ -57,10 +57,10 @@ void ResourceManager::RemoveTexture(std::string name) {
 		std::cout << "Texture does not exist: " << name << std::endl;
 	}
 }
-void ResourceManager::RemoveMesh(std::string name) {
-	if (mMeshes.find(name) != mMeshes.end()) {
-		delete mMeshes[name];
-		mMeshes.erase(name);
+void ResourceManager::RemoveModel(std::string name) {
+	if (mModels.find(name) != mModels.end()) {
+		delete mModels[name];
+		mModels.erase(name);
 	}
 	else {
 		std::cout << "Mesh does not exist: " << name << std::endl;
@@ -85,9 +85,9 @@ Texture* ResourceManager::GetTexture(std::string name) {
 		return nullptr;
 	}
 }
-Mesh* ResourceManager::GetMesh(std::string name) {
-	if (mMeshes.find(name) != mMeshes.end()) {
-		return mMeshes[name];
+Model* ResourceManager::GetModel(std::string name) {
+	if (mModels.find(name) != mModels.end()) {
+		return mModels[name];
 	}
 	else {
 		std::cout << "Mesh does not exist: " << name << std::endl;

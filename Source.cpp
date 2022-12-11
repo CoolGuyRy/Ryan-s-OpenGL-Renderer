@@ -70,7 +70,7 @@ int main() {
 	Camera gCamera(gDisplay.GetWindow(), glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
 
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(90.0f), (float)gDisplay.GetWidth() / (float)gDisplay.GetHeight(), 0.1f, 100.0f);
 
 	Shader* kayShader = new Shader("Data/Shaders/KayKit.vert", "Data/Shaders/KayKit.frag");
 
@@ -81,7 +81,7 @@ int main() {
 	for (unsigned i = 0; i < 10; i++) {
 		for (unsigned j = 0; j < 10; j++) {
 			for (unsigned k = 0; k < 1; k++) {
-				Model* m = new Model(&gCamera, projection, "Data/Models/Dungeon/fbx/tileBrickB_largeCrackedB.fbx", kayShader);
+				Model* m = new Model(&gCamera, projection, "Data/Models/Dungeon/fbx/wallIntersection.fbx", kayShader);
 				m->UpdatePosition(glm::vec3(i * 6.0f, k * 4.0f, j * 6.0f));
 				gScene.push_back(m);
 			}
